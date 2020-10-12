@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "kryptonitemod:kryptonite_item"
+    }
+  },
+  "result": {
+    "item": "kryptonitemod:kryptonite_chestplate_item",
+    "count": 1
+  }
+}
