@@ -43,7 +43,8 @@ public enum KryptoniteItemTier implements IItemTier {
     //1 (all items do 1 damage) + base damage (3.0F here) + items damage
 
     //harvest level, uses, efficiency, base attack damage, enchantability
-    KRYPTONITE(3, 1561, 10.0F, 3.0F, 25, () -> { return Ingredient.fromItems(RegistryHandler.KRYPTONITE_SWORD_ITEM.get()); });
+    KRYPTONITE(3, 1561, 10.0F, 3.0F, 25,
+            () -> { return Ingredient.fromItems(RegistryHandler.KRYPTONITE_ITEM.get()); });
 
     private final int HarvestLevel;
     private final int MaxUses;
@@ -53,12 +54,12 @@ public enum KryptoniteItemTier implements IItemTier {
     private final Supplier<Ingredient> RepairMaterial;
 
     KryptoniteItemTier(int harvestLevel, int maxUses, float efficiency, float attackDamage, int enchantability, Supplier<Ingredient> repairMaterial) {
-        HarvestLevel = harvestLevel;
-        MaxUses = maxUses;
-        Efficiency = efficiency;
-        AttackDamage = attackDamage;
-        Enchantability = enchantability;
-        RepairMaterial = repairMaterial;
+        this.HarvestLevel = harvestLevel;
+        this.MaxUses = maxUses;
+        this.Efficiency = efficiency;
+        this.AttackDamage = attackDamage;
+        this.Enchantability = enchantability;
+        this.RepairMaterial = repairMaterial;
     }
 
     @Override

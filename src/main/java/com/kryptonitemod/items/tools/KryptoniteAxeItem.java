@@ -1,14 +1,14 @@
-package com.kryptonitemod.items;
+package com.kryptonitemod.items.tools;
 
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.util.KryptoniteItemTier;
-import net.minecraft.item.HoeItem;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.SwordItem;
 
-public class KryptoniteHoeItem extends HoeItem {
-    public static final String Name = "kryptonite_hoe_item";
+public class KryptoniteAxeItem extends AxeItem {
+    public static final String Name = "kryptonite_axe_item";
 
-    public KryptoniteHoeItem() {
+    public KryptoniteAxeItem() {
         super(
             KryptoniteItemTier.KRYPTONITE,
             6, //1 (all items do 1 damage) + base damage (3.0F here) + items damage (6)

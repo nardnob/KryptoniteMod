@@ -1,19 +1,19 @@
-package com.kryptonitemod.items;
+package com.kryptonitemod.items.tools;
 
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.util.KryptoniteItemTier;
-import net.minecraft.item.Item;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 
-public class KryptoniteSwordItem extends SwordItem {
-    public static final String Name = "kryptonite_sword_item";
+public class KryptoniteShovelItem extends ShovelItem {
+    public static final String Name = "kryptonite_shovel_item";
 
-    public KryptoniteSwordItem() {
+    public KryptoniteShovelItem() {
         super(
             KryptoniteItemTier.KRYPTONITE,
             6, //1 (all items do 1 damage) + base damage (3.0F here) + items damage (6)
             -2.4F, //4 - 2.4 = 1.6 (vanilla iron sword cooldown)
-            new Item.Properties().group(KryptoniteMod.CreativeTab)
+            new Properties().group(KryptoniteMod.CreativeTab)
         );
     }
 }
