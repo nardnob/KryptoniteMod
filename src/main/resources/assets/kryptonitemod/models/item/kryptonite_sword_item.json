@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "kryptonitemod:items/kryptonite_sword_item"
+  }
+}

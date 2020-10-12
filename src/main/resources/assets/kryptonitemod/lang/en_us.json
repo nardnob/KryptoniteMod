@@ -4,5 +4,6 @@
   "block.kryptonitemod.kryptonite_ore_block": "Kryptonite Ore",
   "item.kryptonitemod.kryptonite_item": "Kryptonite Shard",
   "item.kryptonitemod.kryptonite_ore_item": "Kryptonite Ore",
-  "item.kryptonitemod.kryptonite_block_item": "Block of Kryptonite"
+  "item.kryptonitemod.kryptonite_block_item": "Block of Kryptonite",
+  "item.kryptonitemod.kryptonite_sword_item": "Kryptonite Sword"
 }
