@@ -1,4 +1,4 @@
-package com.kryptonitemod.tools;
+package com.kryptonitemod.util;
 
 import com.kryptonitemod.util.RegistryHandler;
 import net.minecraft.item.IItemTier;
