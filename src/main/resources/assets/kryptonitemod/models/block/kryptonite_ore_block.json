@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "kryptonitemod:blocks/kryptonite_ore_block"
+  }
+}
