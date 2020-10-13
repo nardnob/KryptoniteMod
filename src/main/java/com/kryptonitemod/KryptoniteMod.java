@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 @Mod("kryptonitemod")
 public class KryptoniteMod {
     public static final String ModId = "kryptonitemod";
+    public static final int TicksPerSecond = 20;
+
     private static final Logger LOGGER = LogManager.getLogger();
 
     public KryptoniteMod() {

@@ -8,6 +8,7 @@ import com.kryptonitemod.items.armor.KryptoniteBootsItem;
 import com.kryptonitemod.items.armor.KryptoniteChestplateItem;
 import com.kryptonitemod.items.armor.KryptoniteHelmetItem;
 import com.kryptonitemod.items.armor.KryptoniteLeggingsItem;
+import com.kryptonitemod.items.food.KryptoniteLoafItem;
 import com.kryptonitemod.items.tools.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
@@ -26,6 +27,8 @@ public class RegistryHandler {
 
     //Items
     public static final RegistryObject<Item> KRYPTONITE_ITEM = Items.register(KryptoniteItem.Name, KryptoniteItem::new);
+    //Food
+    public static final RegistryObject<KryptoniteLoafItem> KRYPTONITE_LOAF_ITEM = Items.register(KryptoniteLoafItem.Name, KryptoniteLoafItem::new);
     //Tools
     public static final RegistryObject<PickaxeItem> KRYPTONITE_PICKAXE_ITEM = Items.register(KryptonitePickaxeItem.Name, KryptonitePickaxeItem::new);
     public static final RegistryObject<ShovelItem> KRYPTONITE_SHOVEL_ITEM = Items.register(KryptoniteShovelItem.Name, KryptoniteShovelItem::new);
