@@ -1,11 +1,15 @@
 package com.kryptonitemod.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.OreBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 import net.minecraftforge.common.ToolType;
 
-public class KryptoniteOreBlock extends Block {
+public class KryptoniteOreBlock extends OreBlock {
     public static final String Name = "kryptonite_ore_block";
 
     public KryptoniteOreBlock() {
@@ -16,5 +20,10 @@ public class KryptoniteOreBlock extends Block {
             .harvestLevel(1)
             .harvestTool(ToolType.PICKAXE)
         );
+    }
+
+    @Override
+    public int getExpDrop(BlockState blockState, IWorldReader worldReader, BlockPos position, int fortune, int silkTouch) {
+        return 2;
     }
 }
