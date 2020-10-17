@@ -14,5 +14,6 @@
   "item.kryptonitemod.kryptonite_helmet_item": "Kryptonite Helmet",
   "item.kryptonitemod.kryptonite_chestplate_item": "Kryptonite Chestplate",
   "item.kryptonitemod.kryptonite_leggings_item": "Kryptonite Leggings",
-  "item.kryptonitemod.kryptonite_boots_item": "Kryptonite Boots"
+  "item.kryptonitemod.kryptonite_boots_item": "Kryptonite Boots",
+  "entity.kryptonitemod.gorilla_entity": "Gorilla"
 }

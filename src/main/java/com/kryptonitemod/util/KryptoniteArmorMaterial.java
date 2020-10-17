@@ -78,7 +78,5 @@ public enum KryptoniteArmorMaterial implements IArmorMaterial {
     }
 
     @Override
-    public float func_230304_f_() {
-        return 0;
-    }
+    public float getKnockbackResistance() { return 0; }
 }
