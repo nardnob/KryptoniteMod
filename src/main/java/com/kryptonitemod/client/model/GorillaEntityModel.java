@@ -49,6 +49,8 @@ public class GorillaEntityModel<T extends GorillaEntity> extends EntityModel<T> 
         head = new ModelRenderer(this);
         head.setRotationPoint(0.0F, 7.5F, -2.5F);
         head.setTextureOffset(0, 20).addBox(-4.0F, -5.5F, -3.0F, 8.0F, 7.0F, 6.0F, 0.0F, false);
+        head.setTextureOffset(0, 47).addBox(-2.0F, -1.5F, -4.0F, 4.0F, 3.0F, 1.0F, 0.0F, false);
+        head.setTextureOffset(0, 51).addBox(-3.0F, -4.5F, -4.0F, 6.0F, 1.0F, 1.0F, 0.0F, false);
 
         right_arm = new ModelRenderer(this);
         right_arm.setRotationPoint(-8.0F, 14.5F, -1.0F);
@@ -70,7 +72,7 @@ public class GorillaEntityModel<T extends GorillaEntity> extends EntityModel<T> 
     }
 
     @Override
-    public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
         this.head.rotateAngleX = headPitch * ((float)Math.PI / 180F);
         this.head.rotateAngleY = netHeadYaw * ((float)Math.PI / 180F);
         //this.body.rotateAngleX = ((float)Math.PI / 2F);
