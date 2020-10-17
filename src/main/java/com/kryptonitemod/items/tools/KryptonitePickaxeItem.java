@@ -3,7 +3,6 @@ package com.kryptonitemod.items.tools;
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.util.KryptoniteItemTier;
 import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.SwordItem;
 
 public class KryptonitePickaxeItem extends PickaxeItem {
     public static final String name = "kryptonite_pickaxe_item";

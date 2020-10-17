@@ -1,4 +1,4 @@
-package com.kryptonitemod.items;
+package com.kryptonitemod.items.ore;
 
 import com.kryptonitemod.KryptoniteMod;
 import net.minecraft.block.Block;

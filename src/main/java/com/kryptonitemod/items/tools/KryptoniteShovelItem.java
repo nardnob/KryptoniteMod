@@ -3,7 +3,6 @@ package com.kryptonitemod.items.tools;
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.util.KryptoniteItemTier;
 import net.minecraft.item.ShovelItem;
-import net.minecraft.item.SwordItem;
 
 public class KryptoniteShovelItem extends ShovelItem {
     public static final String name = "kryptonite_shovel_item";

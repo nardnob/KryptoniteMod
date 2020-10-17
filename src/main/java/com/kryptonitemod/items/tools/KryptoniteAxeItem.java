@@ -3,7 +3,6 @@ package com.kryptonitemod.items.tools;
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.util.KryptoniteItemTier;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.SwordItem;
 
 public class KryptoniteAxeItem extends AxeItem {
     public static final String name = "kryptonite_axe_item";
