@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GorillaEntity extends AnimalEntity {
+    public static final String name = "gorilla_entity";
     public static final Ingredient temptationItems = Ingredient.fromItems(Items.BEETROOT);
 
     private EatGrassGoal _eatGrassGoal;

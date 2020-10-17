@@ -1,8 +1,9 @@
 package com.kryptonitemod;
 
 import com.kryptonitemod.entities.GorillaEntity;
+import com.kryptonitemod.init.KryptoniteBlocks;
 import com.kryptonitemod.init.KryptoniteEntityTypes;
-import com.kryptonitemod.util.RegistryHandler;
+import com.kryptonitemod.init.KryptoniteItems;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -17,16 +18,23 @@ import org.apache.logging.log4j.Logger;
 
 @Mod("kryptonitemod")
 public class KryptoniteMod {
-    public static final String ModId = "kryptonitemod";
-    public static final int TicksPerSecond = 20;
+    public static final String modId = "kryptonitemod";
+    public static final int ticksPerSecond = 20;
+    public static final ItemGroup creativeTab = new ItemGroup("kryptoniteTab") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(KryptoniteItems.kryptoniteBlockItem.get());
+        }
+    };
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger _logger = LogManager.getLogger();
 
     public KryptoniteMod() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
-        RegistryHandler.init();
+        KryptoniteItems.items.register(FMLJavaModLoadingContext.get().getModEventBus());
+        KryptoniteBlocks.blocks.register(FMLJavaModLoadingContext.get().getModEventBus());
         KryptoniteEntityTypes.entityTypes.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -40,11 +48,4 @@ public class KryptoniteMod {
 
     private void doClientStuff(final FMLClientSetupEvent event) {
     }
-
-    public static final ItemGroup CreativeTab = new ItemGroup("kryptoniteTab") {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(RegistryHandler.KRYPTONITE_BLOCK_ITEM.get());
-        }
-    };
 }

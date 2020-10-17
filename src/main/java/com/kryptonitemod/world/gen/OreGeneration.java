@@ -1,7 +1,7 @@
 package com.kryptonitemod.world.gen;
 
 import com.kryptonitemod.KryptoniteMod;
-import com.kryptonitemod.util.RegistryHandler;
+import com.kryptonitemod.init.KryptoniteBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.pattern.BlockMatcher;
@@ -17,9 +17,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(modid = KryptoniteMod.ModId, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = KryptoniteMod.modId, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class OreGeneration {
-    public static OreFeatureConfig.FillerBlockType END_STONE = OreFeatureConfig.FillerBlockType.create(
+    public static OreFeatureConfig.FillerBlockType endStone = OreFeatureConfig.FillerBlockType.create(
             "END_STONE", "end_stone", new BlockMatcher(Blocks.END_STONE));
 
     @SubscribeEvent
@@ -28,17 +28,17 @@ public class OreGeneration {
             //Nether generation
             if (biome.getCategory() == Biome.Category.NETHER) {
                 registerOre(biome, 60, 45, 0, 80, OreFeatureConfig.FillerBlockType.NETHERRACK,
-                        RegistryHandler.KRYPTONITE_ORE_BLOCK.get().getDefaultState(), 10);
+                        KryptoniteBlocks.kryptoniteOreBlock.get().getDefaultState(), 10);
 
             //End Generation
             } else if (biome.getCategory() == Biome.Category.THEEND) {
-                registerOre(biome, 60, 45, 0, 80, END_STONE,
-                        RegistryHandler.KRYPTONITE_ORE_BLOCK.get().getDefaultState(), 10);
+                registerOre(biome, 60, 45, 0, 80, endStone,
+                        KryptoniteBlocks.kryptoniteOreBlock.get().getDefaultState(), 10);
 
             //World Generation
             } else {
                 registerOre(biome, 60, 45, 0, 80, OreFeatureConfig.FillerBlockType.NATURAL_STONE,
-                        RegistryHandler.KRYPTONITE_ORE_BLOCK.get().getDefaultState(), 10);
+                        KryptoniteBlocks.kryptoniteOreBlock.get().getDefaultState(), 10);
             }
         }
     }

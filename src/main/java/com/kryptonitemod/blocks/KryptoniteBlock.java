@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraftforge.common.ToolType;
 
 public class KryptoniteBlock extends Block {
-    public static final String Name = "kryptonite_block";
+    public static final String name = "kryptonite_block";
 
     public KryptoniteBlock() {
         super(Properties

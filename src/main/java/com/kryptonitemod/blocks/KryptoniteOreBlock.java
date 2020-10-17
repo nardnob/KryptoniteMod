@@ -10,7 +10,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraftforge.common.ToolType;
 
 public class KryptoniteOreBlock extends OreBlock {
-    public static final String Name = "kryptonite_ore_block";
+    public static final String name = "kryptonite_ore_block";
 
     public KryptoniteOreBlock() {
         super(Block.Properties

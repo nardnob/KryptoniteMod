@@ -1,6 +1,6 @@
 package com.kryptonitemod.util;
 
-import com.kryptonitemod.util.RegistryHandler;
+import com.kryptonitemod.init.KryptoniteItems;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
 
@@ -44,51 +44,51 @@ public enum KryptoniteItemTier implements IItemTier {
 
     //harvest level, uses, efficiency, base attack damage, enchantability
     KRYPTONITE(3, 1561, 10.0F, 3.0F, 25,
-            () -> { return Ingredient.fromItems(RegistryHandler.KRYPTONITE_ITEM.get()); });
+            () -> { return Ingredient.fromItems(KryptoniteItems.kryptoniteItem.get()); });
 
-    private final int HarvestLevel;
-    private final int MaxUses;
-    private final float Efficiency;
-    private final float AttackDamage;
-    private final int Enchantability;
-    private final Supplier<Ingredient> RepairMaterial;
+    private final int _harvestLevel;
+    private final int _maxUses;
+    private final float _efficiency;
+    private final float _attackDamage;
+    private final int _enchantability;
+    private final Supplier<Ingredient> _repairMaterial;
 
     KryptoniteItemTier(int harvestLevel, int maxUses, float efficiency, float attackDamage, int enchantability, Supplier<Ingredient> repairMaterial) {
-        this.HarvestLevel = harvestLevel;
-        this.MaxUses = maxUses;
-        this.Efficiency = efficiency;
-        this.AttackDamage = attackDamage;
-        this.Enchantability = enchantability;
-        this.RepairMaterial = repairMaterial;
+        this._harvestLevel = harvestLevel;
+        this._maxUses = maxUses;
+        this._efficiency = efficiency;
+        this._attackDamage = attackDamage;
+        this._enchantability = enchantability;
+        this._repairMaterial = repairMaterial;
     }
 
     @Override
     public int getMaxUses() {
-        return MaxUses;
+        return _maxUses;
     }
 
     @Override
     public float getEfficiency() {
-        return Efficiency;
+        return _efficiency;
     }
 
     @Override
     public float getAttackDamage() {
-        return AttackDamage;
+        return _attackDamage;
     }
 
     @Override
     public int getHarvestLevel() {
-        return HarvestLevel;
+        return _harvestLevel;
     }
 
     @Override
     public int getEnchantability() {
-        return Enchantability;
+        return _enchantability;
     }
 
     @Override
     public Ingredient getRepairMaterial() {
-        return RepairMaterial.get();
+        return _repairMaterial.get();
     }
 }
