@@ -11,6 +11,7 @@ import com.kryptonitemod.items.armor.KryptoniteLeggingsItem;
 import com.kryptonitemod.items.food.KryptoniteLoafItem;
 import com.kryptonitemod.items.spawneggs.GorillaSpawnEggItem;
 import com.kryptonitemod.items.tools.*;
+import com.kryptonitemod.items.utility.KryptoniteRefineryItem;
 import net.minecraft.item.*;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -41,8 +42,8 @@ public class KryptoniteItems {
     public static final RegistryObject<Item> kryptoniteLeggingsItem = items.register(KryptoniteLeggingsItem.name, KryptoniteLeggingsItem::new);
     public static final RegistryObject<Item> kryptoniteBootsItem = items.register(KryptoniteBootsItem.name, KryptoniteBootsItem::new);
 
-
     //BlockItems
     public static final RegistryObject<Item> kryptoniteOreItem = items.register(KryptoniteOreItem.name, () -> new KryptoniteOreItem(KryptoniteBlocks.kryptoniteOreBlock.get()));
     public static final RegistryObject<Item> kryptoniteBlockItem = items.register(KryptoniteBlockItem.name, () -> new KryptoniteBlockItem(KryptoniteBlocks.kryptoniteBlock.get()));
+    public static final RegistryObject<Item> kryptoniteRefineryItem = items.register(KryptoniteRefineryItem.name, () -> new KryptoniteRefineryItem(KryptoniteBlocks.kryptoniteRefineryBlock.get()));
 }

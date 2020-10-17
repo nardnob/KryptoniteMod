@@ -17,6 +17,7 @@ public class KryptoniteOreBlock extends OreBlock {
             .create(Material.IRON)
             .hardnessAndResistance(5.0f, 6.0f)
             .sound(SoundType.STONE)
+            .setRequiresTool()
             .harvestLevel(1)
             .harvestTool(ToolType.PICKAXE)
         );

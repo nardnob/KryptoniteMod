@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "kryptonitemod:block/kryptonite_refinery_block" },
+    "facing=south": { "model": "kryptonitemod:block/kryptonite_refinery_block", "y":  180},
+    "facing=west": { "model": "kryptonitemod:block/kryptonite_refinery_block", "y":  270},
+    "facing=east": { "model": "kryptonitemod:block/kryptonite_refinery_block", "y":  90}
+  }
+}
