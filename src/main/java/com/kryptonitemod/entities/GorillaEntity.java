@@ -21,11 +21,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GorillaEntity extends AnimalEntity {
-    public static final String name = "gorilla_entity";
-    public static final Ingredient temptationItems = Ingredient.fromItems(Items.BEETROOT);
+    public static final String NAME = "gorilla_entity";
+    public static final Ingredient TEMPTATION_ITEMS = Ingredient.fromItems(Items.BEETROOT);
+    private static final double MOVEMENT_SPEED = 0.5;
 
     private EatGrassGoal _eatGrassGoal;
-    private static final double _movementSpeed = 0.5;
 
     public GorillaEntity(EntityType<? extends AnimalEntity> type, World worldIn) {
         super(type, worldIn);
@@ -35,7 +35,7 @@ public class GorillaEntity extends AnimalEntity {
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.func_233666_p_() //registerAttributes()
                 .createMutableAttribute(Attributes.MAX_HEALTH, 20.0D)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, _movementSpeed);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED);
     }
 
     @Override
@@ -43,12 +43,12 @@ public class GorillaEntity extends AnimalEntity {
         super.registerGoals();
         this._eatGrassGoal = new EatGrassGoal(this);
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, _movementSpeed));
-        this.goalSelector.addGoal(2, new BreedGoal(this, _movementSpeed));
-        this.goalSelector.addGoal(3, new TemptGoal(this, _movementSpeed, temptationItems, false));
-        this.goalSelector.addGoal(4, new FollowParentGoal(this, _movementSpeed));
+        this.goalSelector.addGoal(1, new PanicGoal(this, MOVEMENT_SPEED));
+        this.goalSelector.addGoal(2, new BreedGoal(this, MOVEMENT_SPEED));
+        this.goalSelector.addGoal(3, new TemptGoal(this, MOVEMENT_SPEED, TEMPTATION_ITEMS, false));
+        this.goalSelector.addGoal(4, new FollowParentGoal(this, MOVEMENT_SPEED));
         this.goalSelector.addGoal(5, this._eatGrassGoal);
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, _movementSpeed));
+        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, MOVEMENT_SPEED));
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
     }
@@ -76,7 +76,7 @@ public class GorillaEntity extends AnimalEntity {
     @Nullable
     @Override
     public AgeableEntity createChild(AgeableEntity ageable) {
-        return KryptoniteEntityTypes.gorillaEntity.get().create(this.world);
+        return KryptoniteEntityTypes.GORILLA.get().create(this.world);
     }
 
     @Override

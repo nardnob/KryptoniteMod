@@ -9,8 +9,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(modid = KryptoniteMod.modId, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class KryptoniteEntitySpawns {
+@Mod.EventBusSubscriber(modid = KryptoniteMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class EntitySpawns {
     @SubscribeEvent
     public static void spawnEntities(FMLLoadCompleteEvent event) {
         for (Biome biome : ForgeRegistries.BIOMES) {
@@ -24,7 +24,7 @@ public class KryptoniteEntitySpawns {
             } else {
                 if (isLand) {
                     biome.getSpawns(EntityClassification.CREATURE)
-                            .add(new Biome.SpawnListEntry(KryptoniteEntityTypes.gorillaEntity.get(), 10, 3, 5));
+                            .add(new Biome.SpawnListEntry(KryptoniteEntityTypes.GORILLA.get(), 10, 3, 5));
                 }
             }
         }

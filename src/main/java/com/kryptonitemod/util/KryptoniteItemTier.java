@@ -44,7 +44,7 @@ public enum KryptoniteItemTier implements IItemTier {
 
     //harvest level, uses, efficiency, base attack damage, enchantability
     KRYPTONITE(3, 1561, 10.0F, 3.0F, 25,
-            () -> { return Ingredient.fromItems(KryptoniteItems.kryptoniteItem.get()); });
+            () -> { return Ingredient.fromItems(KryptoniteItems.KRYPTONITE.get()); });
 
     private final int _harvestLevel;
     private final int _maxUses;

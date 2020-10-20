@@ -30,7 +30,7 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
         boolean arrowHovered = relMouseX > 79 && relMouseX < 104 && relMouseY > 34 && relMouseY < 50;
         if (arrowHovered && tileEntity.maxSmeltTime > 0) {
             TranslationTextComponent tooltip = new TranslationTextComponent(
-                    "gui." + KryptoniteMod.modId + ".smeltTimeProgress",
+                    "gui." + KryptoniteMod.MOD_ID + ".smeltTimeProgress",
                     tileEntity.smeltTimeLeft, tileEntity.maxSmeltTime
             );
             this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
@@ -38,7 +38,7 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
         boolean fireHovered = relMouseX > 56 && relMouseX < 70 && relMouseY > 36 && relMouseY < 50;
         if (fireHovered && tileEntity.maxFuelBurnTime > 0) {
             TranslationTextComponent tooltip = new TranslationTextComponent(
-                    "gui." + KryptoniteMod.modId + ".fuelBurnTimeProgress",
+                    "gui." + KryptoniteMod.MOD_ID + ".fuelBurnTimeProgress",
                     tileEntity.fuelBurnTimeLeft, tileEntity.maxFuelBurnTime
             );
             this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
@@ -51,8 +51,8 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
 
         final KryptoniteRefineryTileEntity tileEntity = this.container.tileEntity;
         if (tileEntity.smeltTimeLeft > 0)
-            this.font.drawString(matrixStack, tileEntity.smeltTimeLeft + " / " + tileEntity.maxSmeltTime, 8.0F, this.ySize, 0x404040);
-        this.font.drawString(matrixStack, tileEntity.fuelBurnTimeLeft + " / " + tileEntity.maxFuelBurnTime, 8.0F, this.ySize + 14, 0x404040);
+            this.font.drawString(matrixStack, tileEntity.smeltTimeLeft + " / " + tileEntity.maxSmeltTime, 8.0F, this.ySize, 0xFFFFFF);
+        this.font.drawString(matrixStack, tileEntity.fuelBurnTimeLeft + " / " + tileEntity.maxFuelBurnTime, 8.0F, this.ySize + 14, 0xFFFFFF);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
                     matrixStack,
                     startX + 79, startY + 34,
                     176, 14,
-                    arrowWidth, 14
+                    arrowWidth, 17
             );
         }
         if (tileEntity.isBurning()) {

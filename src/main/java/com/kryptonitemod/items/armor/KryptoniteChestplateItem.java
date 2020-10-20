@@ -6,9 +6,9 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 
 public class KryptoniteChestplateItem extends ArmorItem {
-    public static final String name = "kryptonite_chestplate_item";
+    public static final String NAME = "kryptonite_chestplate_item";
 
     public KryptoniteChestplateItem() {
-        super(KryptoniteArmorMaterial.KRYPTONITE, EquipmentSlotType.CHEST, new Properties().group(KryptoniteMod.creativeTab));
+        super(KryptoniteArmorMaterial.KRYPTONITE, EquipmentSlotType.CHEST, new Properties().group(KryptoniteMod.CREATIVE_TAB));
     }
 }

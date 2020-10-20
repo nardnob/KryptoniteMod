@@ -6,9 +6,9 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 
 public class KryptoniteBootsItem extends ArmorItem {
-    public static final String name = "kryptonite_boots_item";
+    public static final String NAME = "kryptonite_boots_item";
 
     public KryptoniteBootsItem() {
-        super(KryptoniteArmorMaterial.KRYPTONITE, EquipmentSlotType.FEET, new Properties().group(KryptoniteMod.creativeTab));
+        super(KryptoniteArmorMaterial.KRYPTONITE, EquipmentSlotType.FEET, new Properties().group(KryptoniteMod.CREATIVE_TAB));
     }
 }

@@ -2,20 +2,15 @@ package com.kryptonitemod.blocks;
 
 import com.kryptonitemod.init.KryptoniteTileEntityTypes;
 import com.kryptonitemod.tileentities.KryptoniteRefineryTileEntity;
-import com.kryptonitemod.util.KryptoniteLogger;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.stats.Stats;
-import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -38,10 +33,10 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 public class KryptoniteRefineryBlock extends HorizontalBlock {
-    public static final String name = "kryptonite_refinery_block";
+    public static final String NAME = "kryptonite_refinery_block";
     public static final BooleanProperty BURNING = BooleanProperty.create("burning");
 
-    private static final VoxelShape _voxelShapeNorth = Stream.of(
+    private static final VoxelShape VOXEL_SHAPE_NORTH = Stream.of(
             Block.makeCuboidShape(6, -2, 13, 7, 6, 14), Block.makeCuboidShape(0, 0, 0, 16, 2, 16),
             Block.makeCuboidShape(1, 2, 1, 2, 14, 2), Block.makeCuboidShape(2, 2, 1, 14, 3, 2),
             Block.makeCuboidShape(13, 3, 1, 14, 4, 2), Block.makeCuboidShape(2, 3, 1, 3, 4, 2),
@@ -59,7 +54,7 @@ public class KryptoniteRefineryBlock extends HorizontalBlock {
             Block.makeCuboidShape(6, -1, 11, 7, 5, 12)
     ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
 
-    private static final VoxelShape _voxelShapeEast = Stream.of(
+    private static final VoxelShape VOXEL_SHAPE_EAST = Stream.of(
             Block.makeCuboidShape(2, -2, 6, 3, 6, 7), Block.makeCuboidShape(0, 0, 0, 16, 2, 16),
             Block.makeCuboidShape(14, 2, 1, 15, 14, 2), Block.makeCuboidShape(14, 2, 2, 15, 3, 14),
             Block.makeCuboidShape(14, 3, 13, 15, 4, 14), Block.makeCuboidShape(14, 3, 2, 15, 4, 3),
@@ -77,7 +72,7 @@ public class KryptoniteRefineryBlock extends HorizontalBlock {
             Block.makeCuboidShape(4, -1, 6, 5, 5, 7)
     ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
 
-    private static final VoxelShape _voxelShapeSouth = Stream.of(
+    private static final VoxelShape VOXEL_SHAPE_SOUTH = Stream.of(
             Block.makeCuboidShape(0, 0, 0, 16, 2, 16), Block.makeCuboidShape(14, 2, 14, 15, 14, 15),
             Block.makeCuboidShape(2, 2, 14, 14, 3, 15), Block.makeCuboidShape(2, 3, 14, 3, 4, 15),
             Block.makeCuboidShape(13, 3, 14, 14, 4, 15), Block.makeCuboidShape(2, 13, 14, 14, 14, 15),
@@ -95,7 +90,7 @@ public class KryptoniteRefineryBlock extends HorizontalBlock {
             Block.makeCuboidShape(9, -2, 2, 10, 6, 3)
     ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
 
-    private static final VoxelShape _voxelShapeWest = Stream.of(
+    private static final VoxelShape VOXEL_SHAPE_WEST = Stream.of(
             Block.makeCuboidShape(13, -2, 9, 14, 6, 10), Block.makeCuboidShape(0, 0, 0, 16, 2, 16),
             Block.makeCuboidShape(1, 2, 14, 2, 14, 15), Block.makeCuboidShape(1, 2, 2, 2, 3, 14),
             Block.makeCuboidShape(1, 3, 2, 2, 4, 3), Block.makeCuboidShape(1, 3, 13, 2, 4, 14),
@@ -138,16 +133,16 @@ public class KryptoniteRefineryBlock extends HorizontalBlock {
     @Override
     public TileEntity createTileEntity(final BlockState state, final IBlockReader world) {
         // Always use TileEntityType#create to allow registry overrides to work.
-        return KryptoniteTileEntityTypes.kryptoniteRefineryTileEntity.get().create();
+        return KryptoniteTileEntityTypes.KRYPTONITE_REFINERY.get().create();
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         switch (state.get(HORIZONTAL_FACING)) {
-            case NORTH: return _voxelShapeNorth;
-            case EAST: return _voxelShapeEast;
-            case SOUTH: return _voxelShapeSouth;
-            default: return _voxelShapeWest;
+            case NORTH: return VOXEL_SHAPE_NORTH;
+            case EAST: return VOXEL_SHAPE_EAST;
+            case SOUTH: return VOXEL_SHAPE_SOUTH;
+            default: return VOXEL_SHAPE_WEST;
         }
     }
 

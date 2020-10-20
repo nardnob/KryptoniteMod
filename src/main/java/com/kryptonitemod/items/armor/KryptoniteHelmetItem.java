@@ -7,9 +7,9 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 
 public class KryptoniteHelmetItem extends ArmorItem {
-    public static final String name = "kryptonite_helmet_item";
+    public static final String NAME = "kryptonite_helmet_item";
 
     public KryptoniteHelmetItem() {
-        super(KryptoniteArmorMaterial.KRYPTONITE, EquipmentSlotType.HEAD, new Item.Properties().group(KryptoniteMod.creativeTab));
+        super(KryptoniteArmorMaterial.KRYPTONITE, EquipmentSlotType.HEAD, new Item.Properties().group(KryptoniteMod.CREATIVE_TAB));
     }
 }

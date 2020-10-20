@@ -15,7 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraftforge.items.SlotItemHandler;
-
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
@@ -28,11 +27,9 @@ import java.util.Objects;
  * Client: The sync packet is received ClientPlayNetHandler#handleWindowProperty(SWindowPropertyPacket)
  * and the tracked value of is updated ({@link Container#updateProgressBar(int, int)})
  * Client: The tile's data is set to the new value
- *
- * @author Cadiboo
  */
 public class KryptoniteRefineryContainer extends Container {
-    public static final String name = "kryptonite_refinery_container";
+    public static final String NAME = "kryptonite_refinery_container";
     public final KryptoniteRefineryTileEntity tileEntity;
     private final IWorldPosCallable canInteractWithCallable;
 
@@ -49,7 +46,7 @@ public class KryptoniteRefineryContainer extends Container {
      * and logical-client-side from {@link #KryptoniteRefineryContainer(int, PlayerInventory, PacketBuffer)}
      */
     public KryptoniteRefineryContainer(final int windowId, final PlayerInventory playerInventory, final KryptoniteRefineryTileEntity tileEntity) {
-        super(KryptoniteContainerTypes.kryptoniteRefinery.get(), windowId);
+        super(KryptoniteContainerTypes.KRYPTONITE_REFINERY.get(), windowId);
         this.tileEntity = tileEntity;
         this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
 
@@ -134,6 +131,6 @@ public class KryptoniteRefineryContainer extends Container {
 
     @Override
     public boolean canInteractWith(@Nonnull final PlayerEntity player) {
-        return isWithinUsableDistance(canInteractWithCallable, player, KryptoniteBlocks.kryptoniteRefineryBlock.get());
+        return isWithinUsableDistance(canInteractWithCallable, player, KryptoniteBlocks.KRYPTONITE_REFINERY.get());
     }
 }

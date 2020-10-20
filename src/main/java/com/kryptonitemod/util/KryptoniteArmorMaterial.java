@@ -13,10 +13,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.function.Supplier;
 
 public enum KryptoniteArmorMaterial implements IArmorMaterial {
-    KRYPTONITE(KryptoniteMod.modId + ":kryptonite", 33, new int[] { 2, 5, 6, 2 }, 22, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND,
-            3.0F, () -> { return Ingredient.fromItems(KryptoniteItems.kryptoniteItem.get()); });
+    KRYPTONITE(KryptoniteMod.MOD_ID + ":kryptonite", 33, new int[] { 2, 5, 6, 2 }, 22, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND,
+            3.0F, () -> { return Ingredient.fromItems(KryptoniteItems.KRYPTONITE.get()); });
 
-    private static final int[] _maxDamageArray = new int[] { 11, 16, 15, 13 };
+    private static final int[] MAX_DAMAGE_ARRAY = new int[] { 11, 16, 15, 13 };
     private final String _name;
     private final int _maxDamageFactor;
     private final int[] _damageReductionAmountArray;
@@ -44,7 +44,7 @@ public enum KryptoniteArmorMaterial implements IArmorMaterial {
 
     @Override
     public int getDurability(EquipmentSlotType slotIn) {
-        return this._maxDamageArray[slotIn.getIndex()] * this._maxDamageFactor;
+        return this.MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this._maxDamageFactor;
     }
 
     @Override

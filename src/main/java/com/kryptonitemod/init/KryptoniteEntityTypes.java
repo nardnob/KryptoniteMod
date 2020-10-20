@@ -10,12 +10,12 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class KryptoniteEntityTypes {
-    public static final DeferredRegister<EntityType<?>> entityTypes = DeferredRegister.create(ForgeRegistries.ENTITIES, KryptoniteMod.modId);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, KryptoniteMod.MOD_ID);
 
     // Entity Types
-    public static final RegistryObject<EntityType<GorillaEntity>> gorillaEntity =
-            entityTypes.register(GorillaEntity.name, () -> EntityType.Builder
+    public static final RegistryObject<EntityType<GorillaEntity>> GORILLA =
+            ENTITY_TYPES.register(GorillaEntity.NAME, () -> EntityType.Builder
                     .create(GorillaEntity::new, EntityClassification.CREATURE)
                     .size(2.0f, 1.0f) // Hitbox Size
-                    .build(new ResourceLocation(KryptoniteMod.modId, GorillaEntity.name).toString()));
+                    .build(new ResourceLocation(KryptoniteMod.MOD_ID, GorillaEntity.NAME).toString()));
 }

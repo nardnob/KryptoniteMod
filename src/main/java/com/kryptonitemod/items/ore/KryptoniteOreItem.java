@@ -6,9 +6,9 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 
 public class KryptoniteOreItem extends BlockItem {
-    public static final String name = "kryptonite_ore_item";
+    public static final String NAME = "kryptonite_ore_item";
 
     public KryptoniteOreItem(Block blockIn) {
-        super(blockIn, new Item.Properties().group(KryptoniteMod.creativeTab));
+        super(blockIn, new Item.Properties().group(KryptoniteMod.CREATIVE_TAB));
     }
 }

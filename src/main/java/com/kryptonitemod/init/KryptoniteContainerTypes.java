@@ -18,9 +18,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  * Note: This supports registry overrides.
  */
 public final class KryptoniteContainerTypes {
-    public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES =
-            DeferredRegister.create(ForgeRegistries.CONTAINERS, KryptoniteMod.modId);
+    public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, KryptoniteMod.MOD_ID);
 
-    public static final RegistryObject<ContainerType<KryptoniteRefineryContainer>> kryptoniteRefinery =
-            CONTAINER_TYPES.register(KryptoniteRefineryContainer.name, () -> IForgeContainerType.create(KryptoniteRefineryContainer::new));
+    public static final RegistryObject<ContainerType<KryptoniteRefineryContainer>> KRYPTONITE_REFINERY =
+            CONTAINER_TYPES.register(KryptoniteRefineryContainer.NAME, () -> IForgeContainerType.create(KryptoniteRefineryContainer::new));
 }

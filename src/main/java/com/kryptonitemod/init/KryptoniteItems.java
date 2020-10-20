@@ -18,32 +18,32 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class KryptoniteItems {
-    public static final DeferredRegister<Item> items = DeferredRegister.create(ForgeRegistries.ITEMS, KryptoniteMod.modId);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, KryptoniteMod.MOD_ID);
 
     //Misc
-    public static final RegistryObject<Item> kryptoniteItem = items.register(KryptoniteItem.name, KryptoniteItem::new);
+    public static final RegistryObject<Item> KRYPTONITE = ITEMS.register(KryptoniteItem.NAME, KryptoniteItem::new);
 
     //Spawn Eggs
-    public static final RegistryObject<Item> gorillaSpawnEggItem = items.register(GorillaSpawnEggItem.name, GorillaSpawnEggItem::new);
+    public static final RegistryObject<Item> GORILLA_SPAWN_EGG = ITEMS.register(GorillaSpawnEggItem.NAME, GorillaSpawnEggItem::new);
 
     //Food
-    public static final RegistryObject<Item> kryptoniteLoafItem = items.register(KryptoniteLoafItem.name, KryptoniteLoafItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_LOAF = ITEMS.register(KryptoniteLoafItem.NAME, KryptoniteLoafItem::new);
 
     //Tools
-    public static final RegistryObject<Item> kryptonitePickaxeItem = items.register(KryptonitePickaxeItem.name, KryptonitePickaxeItem::new);
-    public static final RegistryObject<Item> kryptoniteShovelItem = items.register(KryptoniteShovelItem.name, KryptoniteShovelItem::new);
-    public static final RegistryObject<Item> kryptoniteSwordItem = items.register(KryptoniteSwordItem.name, KryptoniteSwordItem::new);
-    public static final RegistryObject<Item> kryptoniteAxeItem = items.register(KryptoniteAxeItem.name, KryptoniteAxeItem::new);
-    public static final RegistryObject<Item> kryptoniteHoeItem = items.register(KryptoniteHoeItem.name, KryptoniteHoeItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_PICKAXE = ITEMS.register(KryptonitePickaxeItem.NAME, KryptonitePickaxeItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_SHOVEL = ITEMS.register(KryptoniteShovelItem.NAME, KryptoniteShovelItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_SWORD = ITEMS.register(KryptoniteSwordItem.NAME, KryptoniteSwordItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_AXE = ITEMS.register(KryptoniteAxeItem.NAME, KryptoniteAxeItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_HOE = ITEMS.register(KryptoniteHoeItem.NAME, KryptoniteHoeItem::new);
 
     //Armor
-    public static final RegistryObject<Item> kryptoniteHelmetItem = items.register(KryptoniteHelmetItem.name, KryptoniteHelmetItem::new);
-    public static final RegistryObject<Item> kryptoniteChestItem = items.register(KryptoniteChestplateItem.name, KryptoniteChestplateItem::new);
-    public static final RegistryObject<Item> kryptoniteLeggingsItem = items.register(KryptoniteLeggingsItem.name, KryptoniteLeggingsItem::new);
-    public static final RegistryObject<Item> kryptoniteBootsItem = items.register(KryptoniteBootsItem.name, KryptoniteBootsItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_HELMET = ITEMS.register(KryptoniteHelmetItem.NAME, KryptoniteHelmetItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_CHEST = ITEMS.register(KryptoniteChestplateItem.NAME, KryptoniteChestplateItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_LEGGINGS = ITEMS.register(KryptoniteLeggingsItem.NAME, KryptoniteLeggingsItem::new);
+    public static final RegistryObject<Item> KRYPTONITE_BOOTS = ITEMS.register(KryptoniteBootsItem.NAME, KryptoniteBootsItem::new);
 
     //BlockItems
-    public static final RegistryObject<Item> kryptoniteOreItem = items.register(KryptoniteOreItem.name, () -> new KryptoniteOreItem(KryptoniteBlocks.kryptoniteOreBlock.get()));
-    public static final RegistryObject<Item> kryptoniteBlockItem = items.register(KryptoniteBlockItem.name, () -> new KryptoniteBlockItem(KryptoniteBlocks.kryptoniteBlock.get()));
-    public static final RegistryObject<Item> kryptoniteRefineryItem = items.register(KryptoniteRefineryItem.name, () -> new KryptoniteRefineryItem(KryptoniteBlocks.kryptoniteRefineryBlock.get()));
+    public static final RegistryObject<Item> KRYPTONITE_ORE = ITEMS.register(KryptoniteOreItem.NAME, () -> new KryptoniteOreItem(KryptoniteBlocks.KRYPTONITE_ORE.get()));
+    public static final RegistryObject<Item> KRYPTONITE_BLOCK = ITEMS.register(KryptoniteBlockItem.NAME, () -> new KryptoniteBlockItem(KryptoniteBlocks.KRYPTONITE.get()));
+    public static final RegistryObject<Item> KRYPTONITE_REFINERY = ITEMS.register(KryptoniteRefineryItem.NAME, () -> new KryptoniteRefineryItem(KryptoniteBlocks.KRYPTONITE_REFINERY.get()));
 }

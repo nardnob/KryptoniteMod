@@ -13,7 +13,7 @@ displayName="Kryptonite Mod" #mandatory
 updateJSONURL="http://myurl.me/" #optional
 
 # A URL for the "homepage" for this mod, displayed in the mod UI
-displayURL="stackoverflow.com" #optional
+displayURL="https://github.com/nardnob/KryptoniteMod" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="logo.png" #optional

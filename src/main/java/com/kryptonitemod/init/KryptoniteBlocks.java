@@ -10,9 +10,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class KryptoniteBlocks {
-    public static final DeferredRegister<Block> blocks = DeferredRegister.create(ForgeRegistries.BLOCKS, KryptoniteMod.modId);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, KryptoniteMod.MOD_ID);
 
-    public static final RegistryObject<Block> kryptoniteBlock = blocks.register(KryptoniteBlock.name, KryptoniteBlock::new);
-    public static final RegistryObject<Block> kryptoniteOreBlock = blocks.register(KryptoniteOreBlock.name, KryptoniteOreBlock::new);
-    public static final RegistryObject<Block> kryptoniteRefineryBlock = blocks.register(KryptoniteRefineryBlock.name, KryptoniteRefineryBlock::new);
+    public static final RegistryObject<Block> KRYPTONITE = BLOCKS.register(KryptoniteBlock.NAME, KryptoniteBlock::new);
+    public static final RegistryObject<Block> KRYPTONITE_ORE = BLOCKS.register(KryptoniteOreBlock.NAME, KryptoniteOreBlock::new);
+    public static final RegistryObject<Block> KRYPTONITE_REFINERY = BLOCKS.register(KryptoniteRefineryBlock.NAME, KryptoniteRefineryBlock::new);
 }

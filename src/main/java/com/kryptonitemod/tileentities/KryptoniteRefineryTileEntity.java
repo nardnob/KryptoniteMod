@@ -16,7 +16,6 @@ import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -37,17 +36,32 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class KryptoniteRefineryTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
-    public static final String name = "kryptonite_refinery_tile_entity";
+    public static final String NAME = "kryptonite_refinery_tile_entity";
 
     public static final int FUEL_SLOT = 0;
     public static final int INPUT_SLOT = 1;
     public static final int OUTPUT_SLOT = 2;
 
-    private static final String INVENTORY_TAG = "KryptoniteRefineryTileEntity_inventory";
-    private static final String SMELT_TIME_LEFT_TAG = "KryptoniteRefineryTileEntity_smeltTimeLeft";
-    private static final String MAX_SMELT_TIME_TAG = "KryptoniteRefineryTileEntity_maxSmeltTime";
-    private static final String FUEL_BURN_TIME_LEFT_TAG = "KryptoniteRefineryTileEntity_fuelBurnTimeLeft";
-    private static final String MAX_FUEL_BURN_TIME_TAG = "KryptoniteRefineryTileEntity_maxFuelBurnTime";
+    private static final String INVENTORY_TAG = "inventory";
+    private static final String SMELT_TIME_LEFT_TAG = "smeltTimeLeft";
+    private static final String MAX_SMELT_TIME_TAG = "maxSmeltTime";
+    private static final String FUEL_BURN_TIME_LEFT_TAG = "fuelBurnTimeLeft";
+    private static final String MAX_FUEL_BURN_TIME_TAG = "maxFuelBurnTime";
+
+    // Store the capability lazy optionals as fields to keep the amount of objects we use to a minimum
+    private final LazyOptional<ItemStackHandler> _inventoryCapabilityExternal = LazyOptional.of(() -> this.inventory);
+    // Machines (hoppers, pipes) connected to this furnace's top can only insert/extract items from the input slot
+    private final LazyOptional<IItemHandlerModifiable> _inventoryCapabilityExternalUp = LazyOptional.of(() -> new RangedWrapper(this.inventory, INPUT_SLOT, INPUT_SLOT + 1));
+    // Machines (hoppers, pipes) connected to this furnace's bottom can only insert/extract items from the output slot
+    private final LazyOptional<IItemHandlerModifiable> _inventoryCapabilityExternalDown = LazyOptional.of(() -> new RangedWrapper(this.inventory, OUTPUT_SLOT, OUTPUT_SLOT + 1));
+    // Machines (hoppers, pipes) connected to this furnace's side can only insert/extract items from the fuel and input slots
+    private final LazyOptional<IItemHandlerModifiable> _inventoryCapabilityExternalSides = LazyOptional.of(() -> new RangedWrapper(this.inventory, FUEL_SLOT, INPUT_SLOT + 1));
+
+    public short smeltTimeLeft = -1;
+    public short maxSmeltTime = -1;
+    public short fuelBurnTimeLeft = -1;
+    public short maxFuelBurnTime = -1;
+    private boolean lastBurning = false;
 
     public final ItemStackHandler inventory = new ItemStackHandler(3) {
         @Override
@@ -74,23 +88,8 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
         }
     };
 
-    // Store the capability lazy optionals as fields to keep the amount of objects we use to a minimum
-    private final LazyOptional<ItemStackHandler> inventoryCapabilityExternal = LazyOptional.of(() -> this.inventory);
-    // Machines (hoppers, pipes) connected to this furnace's top can only insert/extract items from the input slot
-    private final LazyOptional<IItemHandlerModifiable> inventoryCapabilityExternalUp = LazyOptional.of(() -> new RangedWrapper(this.inventory, INPUT_SLOT, INPUT_SLOT + 1));
-    // Machines (hoppers, pipes) connected to this furnace's bottom can only insert/extract items from the output slot
-    private final LazyOptional<IItemHandlerModifiable> inventoryCapabilityExternalDown = LazyOptional.of(() -> new RangedWrapper(this.inventory, OUTPUT_SLOT, OUTPUT_SLOT + 1));
-    // Machines (hoppers, pipes) connected to this furnace's side can only insert/extract items from the fuel and input slots
-    private final LazyOptional<IItemHandlerModifiable> inventoryCapabilityExternalSides = LazyOptional.of(() -> new RangedWrapper(this.inventory, FUEL_SLOT, INPUT_SLOT + 1));
-
-    public short smeltTimeLeft = -1;
-    public short maxSmeltTime = -1;
-    public short fuelBurnTimeLeft = -1;
-    public short maxFuelBurnTime = -1;
-    private boolean lastBurning = false;
-
     public KryptoniteRefineryTileEntity() {
-        super(KryptoniteTileEntityTypes.kryptoniteRefineryTileEntity.get());
+        super(KryptoniteTileEntityTypes.KRYPTONITE_REFINERY.get());
     }
 
     private boolean isInput(final ItemStack stack) {
@@ -250,17 +249,17 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
     public <T> LazyOptional<T> getCapability(@Nonnull final Capability<T> cap, @Nullable final Direction side) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (side == null)
-                return inventoryCapabilityExternal.cast();
+                return _inventoryCapabilityExternal.cast();
             switch (side) {
                 case DOWN:
-                    return inventoryCapabilityExternalDown.cast();
+                    return _inventoryCapabilityExternalDown.cast();
                 case UP:
-                    return inventoryCapabilityExternalUp.cast();
+                    return _inventoryCapabilityExternalUp.cast();
                 case NORTH:
                 case SOUTH:
                 case WEST:
                 case EAST:
-                    return inventoryCapabilityExternalSides.cast();
+                    return _inventoryCapabilityExternalSides.cast();
             }
         }
         return super.getCapability(cap, side);
@@ -323,13 +322,13 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
         super.remove();
         // We need to invalidate our capability references so that any cached references (by other mods) don't
         // continue to reference our capabilities and try to use them and/or prevent them from being garbage collected
-        inventoryCapabilityExternal.invalidate();
+        _inventoryCapabilityExternal.invalidate();
     }
 
     @Nonnull
     @Override
     public ITextComponent getDisplayName() {
-        return new TranslationTextComponent(KryptoniteBlocks.kryptoniteRefineryBlock.get().getTranslationKey());
+        return new TranslationTextComponent(KryptoniteBlocks.KRYPTONITE_REFINERY.get().getTranslationKey());
     }
 
     /**
