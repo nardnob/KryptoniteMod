@@ -2,6 +2,7 @@ package com.kryptonitemod.init;
 
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.container.KryptoniteRefineryContainer;
+import com.kryptonitemod.container.KryptoniteFurnaceContainer;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
@@ -22,4 +23,7 @@ public final class KryptoniteContainerTypes {
 
     public static final RegistryObject<ContainerType<KryptoniteRefineryContainer>> KRYPTONITE_REFINERY =
             CONTAINER_TYPES.register(KryptoniteRefineryContainer.NAME, () -> IForgeContainerType.create(KryptoniteRefineryContainer::new));
+
+    public static final RegistryObject<ContainerType<KryptoniteFurnaceContainer>> KRYPTONITE_FURNACE =
+            CONTAINER_TYPES.register(KryptoniteFurnaceContainer.NAME, () -> IForgeContainerType.create(KryptoniteFurnaceContainer::new));
 }

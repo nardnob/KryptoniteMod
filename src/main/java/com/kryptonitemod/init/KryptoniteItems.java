@@ -1,9 +1,9 @@
 package com.kryptonitemod.init;
 
 import com.kryptonitemod.KryptoniteMod;
-import com.kryptonitemod.items.ore.KryptoniteBlockItem;
+import com.kryptonitemod.items.blocks.KryptoniteBlockItem;
 import com.kryptonitemod.items.ore.KryptoniteItem;
-import com.kryptonitemod.items.ore.KryptoniteOreItem;
+import com.kryptonitemod.items.blocks.KryptoniteOreItem;
 import com.kryptonitemod.items.armor.KryptoniteBootsItem;
 import com.kryptonitemod.items.armor.KryptoniteChestplateItem;
 import com.kryptonitemod.items.armor.KryptoniteHelmetItem;
@@ -11,7 +11,8 @@ import com.kryptonitemod.items.armor.KryptoniteLeggingsItem;
 import com.kryptonitemod.items.food.KryptoniteLoafItem;
 import com.kryptonitemod.items.spawneggs.GorillaSpawnEggItem;
 import com.kryptonitemod.items.tools.*;
-import com.kryptonitemod.items.utility.KryptoniteRefineryItem;
+import com.kryptonitemod.items.blocks.KryptoniteRefineryItem;
+import com.kryptonitemod.items.blocks.KryptoniteFurnaceItem;
 import net.minecraft.item.*;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -46,4 +47,5 @@ public class KryptoniteItems {
     public static final RegistryObject<Item> KRYPTONITE_ORE = ITEMS.register(KryptoniteOreItem.NAME, () -> new KryptoniteOreItem(KryptoniteBlocks.KRYPTONITE_ORE.get()));
     public static final RegistryObject<Item> KRYPTONITE_BLOCK = ITEMS.register(KryptoniteBlockItem.NAME, () -> new KryptoniteBlockItem(KryptoniteBlocks.KRYPTONITE.get()));
     public static final RegistryObject<Item> KRYPTONITE_REFINERY = ITEMS.register(KryptoniteRefineryItem.NAME, () -> new KryptoniteRefineryItem(KryptoniteBlocks.KRYPTONITE_REFINERY.get()));
+    public static final RegistryObject<Item> KRYPTONITE_FURNACE = ITEMS.register(KryptoniteFurnaceItem.NAME, () -> new KryptoniteRefineryItem(KryptoniteBlocks.KRYPTONITE_FURNACE.get()));
 }

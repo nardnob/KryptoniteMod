@@ -4,6 +4,7 @@ import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.blocks.KryptoniteBlock;
 import com.kryptonitemod.blocks.KryptoniteOreBlock;
 import com.kryptonitemod.blocks.KryptoniteRefineryBlock;
+import com.kryptonitemod.blocks.KryptoniteFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -15,4 +16,5 @@ public class KryptoniteBlocks {
     public static final RegistryObject<Block> KRYPTONITE = BLOCKS.register(KryptoniteBlock.NAME, KryptoniteBlock::new);
     public static final RegistryObject<Block> KRYPTONITE_ORE = BLOCKS.register(KryptoniteOreBlock.NAME, KryptoniteOreBlock::new);
     public static final RegistryObject<Block> KRYPTONITE_REFINERY = BLOCKS.register(KryptoniteRefineryBlock.NAME, KryptoniteRefineryBlock::new);
+    public static final RegistryObject<Block> KRYPTONITE_FURNACE = BLOCKS.register(KryptoniteFurnaceBlock.NAME, KryptoniteFurnaceBlock::new);
 }

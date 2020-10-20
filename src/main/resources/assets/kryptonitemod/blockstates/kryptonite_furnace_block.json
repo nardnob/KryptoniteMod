@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,burning=false":	{ "model": "kryptonitemod:block/kryptonite_furnace_block" },
+    "facing=south,burning=false":	{ "model": "kryptonitemod:block/kryptonite_furnace_block", "y": 180 },
+    "facing=west,burning=false":	{ "model": "kryptonitemod:block/kryptonite_furnace_block", "y": 270 },
+    "facing=east,burning=false":	{ "model": "kryptonitemod:block/kryptonite_furnace_block", "y": 90 },
+    "facing=north,burning=true":	{ "model": "kryptonitemod:block/kryptonite_furnace_block_burning" },
+    "facing=south,burning=true":	{ "model": "kryptonitemod:block/kryptonite_furnace_block_burning", "y": 180 },
+    "facing=west,burning=true":		{ "model": "kryptonitemod:block/kryptonite_furnace_block_burning", "y": 270 },
+    "facing=east,burning=true":		{ "model": "kryptonitemod:block/kryptonite_furnace_block_burning", "y": 90 }
+  }
+}

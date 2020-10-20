@@ -2,6 +2,7 @@ package com.kryptonitemod.util;
 
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.client.gui.KryptoniteRefineryScreen;
+import com.kryptonitemod.client.gui.KryptoniteFurnaceScreen;
 import com.kryptonitemod.client.render.GorillaEntityRenderer;
 import com.kryptonitemod.entities.GorillaEntity;
 import com.kryptonitemod.init.KryptoniteContainerTypes;
@@ -31,6 +32,7 @@ public class ClientEventBusSubscriber {
         //event.enqueueWork
         DeferredWorkQueue.runLater(() -> {
             ScreenManager.registerFactory(KryptoniteContainerTypes.KRYPTONITE_REFINERY.get(), KryptoniteRefineryScreen::new);
+            ScreenManager.registerFactory(KryptoniteContainerTypes.KRYPTONITE_FURNACE.get(), KryptoniteFurnaceScreen::new);
             KrypLogger.LOGGER.debug("Registered ContainerType Screens");
 
             GlobalEntityTypeAttributes.put(KryptoniteEntityTypes.GORILLA.get(), GorillaEntity.setCustomAttributes().create());
