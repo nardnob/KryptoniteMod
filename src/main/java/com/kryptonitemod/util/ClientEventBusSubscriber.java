@@ -1,13 +1,19 @@
 package com.kryptonitemod.util;
 
 import com.kryptonitemod.KryptoniteMod;
+import com.kryptonitemod.client.gui.KryptoniteRefineryScreen;
 import com.kryptonitemod.client.render.GorillaEntityRenderer;
+import com.kryptonitemod.entities.GorillaEntity;
+import com.kryptonitemod.init.KryptoniteContainerTypes;
 import com.kryptonitemod.init.KryptoniteEntityTypes;
 import com.kryptonitemod.items.spawneggs.KryptoniteSpawnEggItem;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -16,7 +22,20 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientEventBusSubscriber {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
+        KryptoniteLogger.logger.debug("Registered TileEntity Renderers");
+
         RenderingRegistry.registerEntityRenderingHandler(KryptoniteEntityTypes.gorillaEntity.get(), GorillaEntityRenderer::new);
+        KryptoniteLogger.logger.debug("Registered Entity Renderers");
+
+        //TODO kryp - replace deprecated function after migration back to 1.16.3
+        //event.enqueueWork
+        DeferredWorkQueue.runLater(() -> {
+            ScreenManager.registerFactory(KryptoniteContainerTypes.kryptoniteRefinery.get(), KryptoniteRefineryScreen::new);
+            KryptoniteLogger.logger.debug("Registered ContainerType Screens");
+
+            GlobalEntityTypeAttributes.put(KryptoniteEntityTypes.gorillaEntity.get(), GorillaEntity.setCustomAttributes().create());
+            KryptoniteLogger.logger.debug("Registered GlobalTypeAttributes");
+        });
     }
 
     @SubscribeEvent

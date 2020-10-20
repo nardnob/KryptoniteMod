@@ -1,4 +1,6 @@
 {
+  "gui.kryptonitemod.smeltTimeProgress": "Smelt time %s/%s",
+  "gui.kryptonitemod.fuelBurnTimeProgress": "Fuel burn time %s/%s",
   "itemGroup.kryptoniteTab": "Kryptonite",
   "container.kryptonite_refinery_tileentity": "Kryptonite Refinery",
   "entity.kryptonitemod.gorilla_entity": "Gorilla",

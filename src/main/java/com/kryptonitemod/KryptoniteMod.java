@@ -1,9 +1,7 @@
 package com.kryptonitemod;
 
 import com.kryptonitemod.entities.GorillaEntity;
-import com.kryptonitemod.init.KryptoniteBlocks;
-import com.kryptonitemod.init.KryptoniteEntityTypes;
-import com.kryptonitemod.init.KryptoniteItems;
+import com.kryptonitemod.init.*;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -28,22 +26,12 @@ public class KryptoniteMod {
     };
 
     public KryptoniteMod() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-
         KryptoniteItems.items.register(FMLJavaModLoadingContext.get().getModEventBus());
         KryptoniteBlocks.blocks.register(FMLJavaModLoadingContext.get().getModEventBus());
         KryptoniteEntityTypes.entityTypes.register(FMLJavaModLoadingContext.get().getModEventBus());
+        KryptoniteTileEntityTypes.tileEntityTypes.register(FMLJavaModLoadingContext.get().getModEventBus());
+        KryptoniteContainerTypes.CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    private void setup(final FMLCommonSetupEvent event) {
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(KryptoniteEntityTypes.gorillaEntity.get(), GorillaEntity.setCustomAttributes().create());
-        });
-    }
-
-    private void doClientStuff(final FMLClientSetupEvent event) {
     }
 }
