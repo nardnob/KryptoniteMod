@@ -1,5 +1,6 @@
 {
   "itemGroup.kryptoniteTab": "Kryptonite",
+  "container.kryptonite_refinery_tileentity": "Kryptonite Refinery",
   "entity.kryptonitemod.gorilla_entity": "Gorilla",
   "block.kryptonitemod.kryptonite_block": "Block of Kryptonite",
   "block.kryptonitemod.kryptonite_ore_block": "Kryptonite Ore",

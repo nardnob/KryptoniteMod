@@ -1,25 +1,38 @@
 package com.kryptonitemod.blocks;
 
+import com.kryptonitemod.tileentities.KryptoniteRefineryTileEntity;
+import com.kryptonitemod.util.KryptoniteLogger;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.stats.Stats;
+import net.minecraft.tileentity.FurnaceTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
+import javax.annotation.Nullable;
+import java.util.Random;
 import java.util.stream.Stream;
 
-public class KryptoniteRefineryBlock extends Block {
+public class KryptoniteRefineryBlock extends AbstractFurnaceBlock {
     public static final String name = "kryptonite_refinery_block";
     private static final DirectionProperty _direction = HorizontalBlock.HORIZONTAL_FACING;
+
     private static final VoxelShape _voxelShapeNorth = Stream.of(
             Block.makeCuboidShape(6, -2, 13, 7, 6, 14), Block.makeCuboidShape(0, 0, 0, 16, 2, 16),
             Block.makeCuboidShape(1, 2, 1, 2, 14, 2), Block.makeCuboidShape(2, 2, 1, 14, 3, 2),
@@ -129,11 +142,56 @@ public class KryptoniteRefineryBlock extends Block {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(_direction);
+        builder.add(_direction, LIT);
     }
 
     @Override
     public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return 0.6F;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+        return new KryptoniteRefineryTileEntity();
+    }
+
+    /**
+     * Interface for handling interaction with blocks that implement AbstractFurnaceBlock. Called in onBlockActivated
+     * inside AbstractFurnaceBlock.
+     */
+    protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        KryptoniteLogger.logger.info("testkryp1");
+        KryptoniteLogger.logger.info(tileentity);
+        if (tileentity instanceof KryptoniteRefineryTileEntity) {
+            KryptoniteLogger.logger.info("testkryp2");
+            player.openContainer((INamedContainerProvider)tileentity);
+        }
+    }
+
+    /**
+     * Called periodically clientside on blocks near the player to show effects (like furnace fire particles).
+     */
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (stateIn.get(LIT)) {
+            double d0 = (double)pos.getX() + 0.5D;
+            double d1 = (double)pos.getY();
+            double d2 = (double)pos.getZ() + 0.5D;
+            if (rand.nextDouble() < 0.1D) {
+                worldIn.playSound(d0, d1, d2, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+            }
+
+            Direction direction = stateIn.get(FACING);
+            Direction.Axis direction$axis = direction.getAxis();
+            double d3 = 0.52D;
+            double d4 = rand.nextDouble() * 0.6D - 0.3D;
+            double d5 = direction$axis == Direction.Axis.X ? (double)direction.getXOffset() * 0.52D : d4;
+            double d6 = rand.nextDouble() * 6.0D / 16.0D;
+            double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getZOffset() * 0.52D : d4;
+            worldIn.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+            worldIn.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+        }
     }
 }

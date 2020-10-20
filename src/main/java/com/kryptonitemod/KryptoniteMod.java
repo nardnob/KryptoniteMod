@@ -27,8 +27,6 @@ public class KryptoniteMod {
         }
     };
 
-    private static final Logger _logger = LogManager.getLogger();
-
     public KryptoniteMod() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
