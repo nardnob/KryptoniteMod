@@ -12,7 +12,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefineryContainer> {
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/furnace.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(KryptoniteMod.MOD_ID, "textures/gui/container/kryptonite_refinery.png");
 
     public KryptoniteRefineryScreen(final KryptoniteRefineryContainer container, final PlayerInventory inventory, final ITextComponent title) {
         super(container, inventory, title);
