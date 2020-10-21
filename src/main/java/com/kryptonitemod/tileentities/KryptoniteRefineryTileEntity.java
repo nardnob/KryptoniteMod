@@ -206,8 +206,8 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
             if (smeltTimeLeft == 0) {
                 //set attributes on input item as a result
 
-                input.shrink(1);
-                inventory.setStackInSlot(INPUT_SLOT, input); // Update the data
+                //input.shrink(1);
+                //inventory.setStackInSlot(INPUT_SLOT, input); // Update the data
 
                 smeltTimeLeft = -1; // Set to -1 so we smelt the next stack on the next tick
             }

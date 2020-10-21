@@ -51,12 +51,10 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, final int mouseX, final int mouseY) {
         //super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
 
-        /*
         final KryptoniteRefineryTileEntity tileEntity = this.container.tileEntity;
         if (tileEntity.smeltTimeLeft > 0)
             this.font.drawString(matrixStack, tileEntity.smeltTimeLeft + " / " + tileEntity.maxSmeltTime, 8.0F, this.ySize, 0xFFFFFF);
         this.font.drawString(matrixStack, tileEntity.fuelBurnTimeLeft + " / " + tileEntity.maxFuelBurnTime, 8.0F, this.ySize + 14, 0xFFFFFF);
-        */
     }
 
     @Override
