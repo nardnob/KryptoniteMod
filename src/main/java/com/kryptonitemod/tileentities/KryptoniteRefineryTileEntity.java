@@ -3,7 +3,10 @@ package com.kryptonitemod.tileentities;
 import com.kryptonitemod.blocks.KryptoniteRefineryBlock;
 import com.kryptonitemod.container.KryptoniteRefineryContainer;
 import com.kryptonitemod.init.KryptoniteBlocks;
+import com.kryptonitemod.init.KryptoniteItems;
 import com.kryptonitemod.init.KryptoniteTileEntityTypes;
+import com.kryptonitemod.items.blocks.KryptoniteRefineryItem;
+import com.kryptonitemod.util.helpers.IKryptoniteChargeable;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -12,17 +15,14 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -38,9 +38,16 @@ import java.util.Optional;
 public class KryptoniteRefineryTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
     public static final String NAME = "kryptonite_refinery_tile_entity";
 
-    public static final int FUEL_SLOT = 0;
-    public static final int INPUT_SLOT = 1;
-    public static final int OUTPUT_SLOT = 2;
+    public static final int INPUT_SLOT = 0;
+    public static final int FUEL_SLOT_1 = 1;
+    public static final int FUEL_SLOT_2 = 2;
+    public static final int FUEL_SLOT_3 = 3;
+    public static final int FUEL_SLOT_4 = 4;
+    public static final int FUEL_SLOT_5 = 5;
+    public static final int FUEL_SLOT_6 = 6;
+    public static final int FUEL_SLOT_7 = 7;
+    public static final int FUEL_SLOT_8 = 8;
+    public static final int FUEL_SLOT_9 = 9;
 
     private static final String INVENTORY_TAG = "inventory";
     private static final String SMELT_TIME_LEFT_TAG = "smeltTimeLeft";
@@ -53,26 +60,32 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
     // Machines (hoppers, pipes) connected to this furnace's top can only insert/extract items from the input slot
     private final LazyOptional<IItemHandlerModifiable> _inventoryCapabilityExternalUp = LazyOptional.of(() -> new RangedWrapper(this.inventory, INPUT_SLOT, INPUT_SLOT + 1));
     // Machines (hoppers, pipes) connected to this furnace's bottom can only insert/extract items from the output slot
-    private final LazyOptional<IItemHandlerModifiable> _inventoryCapabilityExternalDown = LazyOptional.of(() -> new RangedWrapper(this.inventory, OUTPUT_SLOT, OUTPUT_SLOT + 1));
+    private final LazyOptional<IItemHandlerModifiable> _inventoryCapabilityExternalDown = LazyOptional.of(() -> new RangedWrapper(this.inventory, INPUT_SLOT, INPUT_SLOT + 1));
     // Machines (hoppers, pipes) connected to this furnace's side can only insert/extract items from the fuel and input slots
-    private final LazyOptional<IItemHandlerModifiable> _inventoryCapabilityExternalSides = LazyOptional.of(() -> new RangedWrapper(this.inventory, FUEL_SLOT, INPUT_SLOT + 1));
+    private final LazyOptional<IItemHandlerModifiable> _inventoryCapabilityExternalSides = LazyOptional.of(() -> new RangedWrapper(this.inventory, FUEL_SLOT_1, FUEL_SLOT_1 + 1));
 
     public short smeltTimeLeft = -1;
     public short maxSmeltTime = -1;
     public short fuelBurnTimeLeft = -1;
     public short maxFuelBurnTime = -1;
-    private boolean lastBurning = false;
+    private boolean hadFuelLastTick = false;
 
-    public final ItemStackHandler inventory = new ItemStackHandler(3) {
+    public final ItemStackHandler inventory = new ItemStackHandler(10) {
         @Override
         public boolean isItemValid(final int slot, @Nonnull final ItemStack stack) {
             switch (slot) {
-                case FUEL_SLOT:
-                    return FurnaceTileEntity.isFuel(stack);
                 case INPUT_SLOT:
-                    return isInput(stack);
-                case OUTPUT_SLOT:
-                    return isOutput(stack);
+                    return isValidInput(stack);
+                case FUEL_SLOT_1:
+                case FUEL_SLOT_2:
+                case FUEL_SLOT_3:
+                case FUEL_SLOT_4:
+                case FUEL_SLOT_5:
+                case FUEL_SLOT_6:
+                case FUEL_SLOT_7:
+                case FUEL_SLOT_8:
+                case FUEL_SLOT_9:
+                    return isValidFuel(stack);
                 default:
                     return false;
             }
@@ -92,15 +105,18 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
         super(KryptoniteTileEntityTypes.KRYPTONITE_REFINERY.get());
     }
 
-    private boolean isInput(final ItemStack stack) {
+    private boolean isValidFuel(final ItemStack stack) {
         if (stack.isEmpty())
             return false;
-        return getRecipe(stack).isPresent();
+
+        return stack.getItem() == KryptoniteItems.KRYPTONITE.get();
     }
 
-    private boolean isOutput(final ItemStack stack) {
-        final Optional<ItemStack> result = getResult(inventory.getStackInSlot(INPUT_SLOT));
-        return result.isPresent() && ItemStack.areItemsEqual(result.get(), stack);
+    private boolean isValidInput(final ItemStack stack) {
+        if (stack.isEmpty())
+            return false;
+
+        return stack.getItem() instanceof IKryptoniteChargeable;
     }
 
     /**
@@ -119,16 +135,6 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
     }
 
     /**
-     * @return The result of smelting the input stack
-     */
-    private Optional<ItemStack> getResult(final ItemStack input) {
-        // Due to vanilla's code we need to pass an IInventory into RecipeManager#getRecipe and
-        // AbstractCookingRecipe#getCraftingResult() so we make one here.
-        final Inventory dummyInventory = new Inventory(input);
-        return getRecipe(dummyInventory).map(recipe -> recipe.getCraftingResult(dummyInventory));
-    }
-
-    /**
      * Called every tick to update our tile entity
      */
     @Override
@@ -136,67 +142,88 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
         if (world == null || world.isRemote)
             return;
 
-        // Fuel burning code
-
         boolean hasFuel = false;
         if (isBurning()) {
             hasFuel = true;
             --fuelBurnTimeLeft;
         }
 
-        // Smelting code
-
         final ItemStack input = inventory.getStackInSlot(INPUT_SLOT).copy();
-        final ItemStack result = getResult(input).orElse(ItemStack.EMPTY);
 
-        if (!result.isEmpty() && isInput(input)) {
-            final boolean canInsertResultIntoOutput = inventory.insertItem(OUTPUT_SLOT, result, true).isEmpty();
-            if (canInsertResultIntoOutput) {
-                if (!hasFuel)
-                    if (burnFuel())
-                        hasFuel = true;
-                if (hasFuel) {
-                    if (smeltTimeLeft == -1) { // Item has not been smelted before
-                        smeltTimeLeft = maxSmeltTime = getSmeltTime(input);
-                    } else { // Item was already being smelted
-                        --smeltTimeLeft;
-                        if (smeltTimeLeft == 0) {
-                            inventory.insertItem(OUTPUT_SLOT, result, false);
-                            if (input.hasContainerItem())
-                                inventory.setStackInSlot(INPUT_SLOT, input.getContainerItem());
-                            else {
-                                input.shrink(1);
-                                inventory.setStackInSlot(INPUT_SLOT, input); // Update the data
-                            }
-                            smeltTimeLeft = -1; // Set to -1 so we smelt the next stack on the next tick
-                        }
-                    }
-                } else // No fuel -> add to smelt time left to simulate cooling
-                    if (smeltTimeLeft < maxSmeltTime)
-                        ++smeltTimeLeft;
+        if (isValidInput(input)) {
+            if (!hasFuel && burnFuel()) {
+                hasFuel = true;
             }
-        } else // We have an invalid input stack (somehow)
+
+            smeltTick(hasFuel, input);
+        } else {
+            // We have an invalid input stack (somehow)
             smeltTimeLeft = maxSmeltTime = -1;
-
-        // Syncing code
-
-        // If the burning state has changed.
-        if (lastBurning != hasFuel) { // We use hasFuel because the current fuel may be all burnt out but we have more that will be used next tick
-
-            // "markDirty" tells vanilla that the chunk containing the tile entity has
-            // changed and means the game will save the chunk to disk later.
-            this.markDirty();
-
-            final BlockState newState = this.getBlockState()
-                    .with(KryptoniteRefineryBlock.BURNING, hasFuel);
-
-            // Flag 2: Send the change to clients
-            world.setBlockState(pos, newState, 2);
-
-            // Update the last synced burning state to the current burning state
-            lastBurning = hasFuel;
         }
 
+        if (hadFuelLastTick != hasFuel) {
+            updateBlockStateWithBurning(hasFuel);
+        }
+
+        hadFuelLastTick = hasFuel;
+    }
+
+    private boolean burnFuel() {
+        final ItemStack fuelStack = inventory.getStackInSlot(FUEL_SLOT_1).copy();
+
+        if (!fuelStack.isEmpty()) {
+            final int burnTime = getSmeltTime(fuelStack);
+
+            if (burnTime > 0) {
+                fuelBurnTimeLeft = maxFuelBurnTime = ((short) burnTime);
+
+                fuelStack.shrink(1);
+                inventory.setStackInSlot(FUEL_SLOT_1, fuelStack); // Update the data
+
+                return true;
+            }
+        }
+
+        fuelBurnTimeLeft = maxFuelBurnTime = -1;
+        return false;
+    }
+
+    private void smeltTick(boolean hasFuel, ItemStack input) {
+        if (!hasFuel) {
+            // No fuel -> add to smelt time left to simulate cooling
+            if (smeltTimeLeft < maxSmeltTime) {
+                smeltTimeLeft++;
+            }
+            return;
+        }
+
+        boolean notCurrentlySmelting = smeltTimeLeft == -1;
+        if (notCurrentlySmelting) {
+            smeltTimeLeft = maxSmeltTime = getSmeltTime(input);
+        } else {
+            smeltTimeLeft--;
+
+            if (smeltTimeLeft == 0) {
+                //set attributes on input item as a result
+
+                input.shrink(1);
+                inventory.setStackInSlot(INPUT_SLOT, input); // Update the data
+
+                smeltTimeLeft = -1; // Set to -1 so we smelt the next stack on the next tick
+            }
+        }
+    }
+
+    private void updateBlockStateWithBurning(boolean hasFuel) {
+        // "markDirty" tells vanilla that the chunk containing the tile entity has
+        // changed and means the game will save the chunk to disk later.
+        this.markDirty();
+
+        final BlockState newState = this.getBlockState()
+                .with(KryptoniteRefineryBlock.BURNING, hasFuel);
+
+        // Flag 2: Send the change to clients
+        world.setBlockState(pos, newState, 2);
     }
 
     /**
@@ -205,32 +232,7 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
      * @return The custom smelt time or 200 if there is no recipe for the input
      */
     private short getSmeltTime(final ItemStack input) {
-        return getRecipe(input)
-                .map(AbstractCookingRecipe::getCookTime)
-                .orElse(200)
-                .shortValue();
-    }
-
-    /**
-     * @return If the fuel was burnt
-     */
-    private boolean burnFuel() {
-        final ItemStack fuelStack = inventory.getStackInSlot(FUEL_SLOT).copy();
-        if (!fuelStack.isEmpty()) {
-            final int burnTime = ForgeHooks.getBurnTime(fuelStack);
-            if (burnTime > 0) {
-                fuelBurnTimeLeft = maxFuelBurnTime = ((short) burnTime);
-                if (fuelStack.hasContainerItem())
-                    inventory.setStackInSlot(FUEL_SLOT, fuelStack.getContainerItem());
-                else {
-                    fuelStack.shrink(1);
-                    inventory.setStackInSlot(FUEL_SLOT, fuelStack); // Update the data
-                }
-                return true;
-            }
-        }
-        fuelBurnTimeLeft = maxFuelBurnTime = -1;
-        return false;
+        return KryptoniteRefineryItem.REFINERY_CHARGE_TIME;
     }
 
     public boolean isBurning() {
@@ -271,7 +273,7 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
         // We set this in onLoad instead of the constructor so that TileEntities
         // constructed from NBT (saved tile entities) have this set to the proper value
         if (world != null && !world.isRemote)
-            lastBurning = isBurning();
+            hadFuelLastTick = isBurning();
     }
 
     /**

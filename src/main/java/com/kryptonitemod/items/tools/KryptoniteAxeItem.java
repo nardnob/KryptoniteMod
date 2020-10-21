@@ -2,9 +2,10 @@ package com.kryptonitemod.items.tools;
 
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.util.KryptoniteItemTier;
+import com.kryptonitemod.util.helpers.IKryptoniteChargeable;
 import net.minecraft.item.AxeItem;
 
-public class KryptoniteAxeItem extends AxeItem {
+public class KryptoniteAxeItem extends AxeItem implements IKryptoniteChargeable {
     public static final String NAME = "kryptonite_axe_item";
 
     public KryptoniteAxeItem() {

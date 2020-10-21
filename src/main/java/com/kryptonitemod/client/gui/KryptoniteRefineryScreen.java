@@ -24,6 +24,7 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
 
+        /*
         int relMouseX = mouseX - this.guiLeft;
         int relMouseY = mouseY - this.guiTop;
         final KryptoniteRefineryTileEntity tileEntity = this.container.tileEntity;
@@ -43,22 +44,25 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
             );
             this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
         }
+        */
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, final int mouseX, final int mouseY) {
-        super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
+        //super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
 
+        /*
         final KryptoniteRefineryTileEntity tileEntity = this.container.tileEntity;
         if (tileEntity.smeltTimeLeft > 0)
             this.font.drawString(matrixStack, tileEntity.smeltTimeLeft + " / " + tileEntity.maxSmeltTime, 8.0F, this.ySize, 0xFFFFFF);
         this.font.drawString(matrixStack, tileEntity.fuelBurnTimeLeft + " / " + tileEntity.maxFuelBurnTime, 8.0F, this.ySize + 14, 0xFFFFFF);
+        */
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, final float partialTicks, final int mouseX, final int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        getMinecraft().getTextureManager().bindTexture(BACKGROUND_TEXTURE);
+        getMinecraft().getTextureManager().bindTexture(this.BACKGROUND_TEXTURE);
         int startX = this.guiLeft;
         int startY = this.guiTop;
 
@@ -67,6 +71,7 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
 
         this.blit(matrixStack, startX, startY, 0, 0, this.xSize, this.ySize);
 
+        /*
         final KryptoniteRefineryTileEntity tileEntity = container.tileEntity;
         if (tileEntity.smeltTimeLeft > 0) {
             // Draw progress arrow
@@ -88,6 +93,7 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
                     14, flameHeight
             );
         }
+        */
     }
 
     private int getSmeltTimeScaled() {

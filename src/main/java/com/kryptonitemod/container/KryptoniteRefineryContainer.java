@@ -32,6 +32,7 @@ public class KryptoniteRefineryContainer extends Container {
     public static final String NAME = "kryptonite_refinery_container";
     public final KryptoniteRefineryTileEntity tileEntity;
     private final IWorldPosCallable canInteractWithCallable;
+    private static final int SLOT_SIZE_WITH_PADDING = 18; // slots are 16x16, plus 2 (for spacing/borders) is 18x18
 
     /**
      * Logical-client-side constructor, called from ContainerType#create(IContainerFactory)
@@ -58,26 +59,32 @@ public class KryptoniteRefineryContainer extends Container {
 
         // Add all the slots for the tileEntity's inventory and the playerInventory to this container
 
+
+        final int fuelStartX = 8;
+        final int fuelStartY = 8;
+        // Input slots
+        for (int column = 0; column < 9; column++) {
+            this.addSlot(new SlotItemHandler(tileEntity.inventory, KryptoniteRefineryTileEntity.FUEL_SLOT_1 + column,
+                    fuelStartX + (column * this.SLOT_SIZE_WITH_PADDING), fuelStartY));
+        }
+
         // Tile inventory slot(s)
-        this.addSlot(new SlotItemHandler(tileEntity.inventory, KryptoniteRefineryTileEntity.FUEL_SLOT, 56, 53));
-        this.addSlot(new SlotItemHandler(tileEntity.inventory, KryptoniteRefineryTileEntity.INPUT_SLOT, 56, 17));
-        this.addSlot(new SlotItemHandler(tileEntity.inventory, KryptoniteRefineryTileEntity.OUTPUT_SLOT, 116, 35));
+        this.addSlot(new SlotItemHandler(tileEntity.inventory, KryptoniteRefineryTileEntity.INPUT_SLOT, 80, 60));
 
         final int playerInventoryStartX = 8;
         final int playerInventoryStartY = 84;
-        final int slotSizePlus2 = 18; // slots are 16x16, plus 2 (for spacing/borders) is 18x18
 
         // Player Top Inventory slots
         for (int row = 0; row < 3; ++row) {
             for (int column = 0; column < 9; ++column) {
-                this.addSlot(new Slot(playerInventory, 9 + (row * 9) + column, playerInventoryStartX + (column * slotSizePlus2), playerInventoryStartY + (row * slotSizePlus2)));
+                this.addSlot(new Slot(playerInventory, 9 + (row * 9) + column, playerInventoryStartX + (column * SLOT_SIZE_WITH_PADDING), playerInventoryStartY + (row * SLOT_SIZE_WITH_PADDING)));
             }
         }
 
-        final int playerHotbarY = playerInventoryStartY + slotSizePlus2 * 3 + 4;
+        final int playerHotbarY = playerInventoryStartY + SLOT_SIZE_WITH_PADDING * 3 + 4;
         // Player Hotbar slots
         for (int column = 0; column < 9; ++column) {
-            this.addSlot(new Slot(playerInventory, column, playerInventoryStartX + (column * slotSizePlus2), playerHotbarY));
+            this.addSlot(new Slot(playerInventory, column, playerInventoryStartX + (column * SLOT_SIZE_WITH_PADDING), playerHotbarY));
         }
     }
 

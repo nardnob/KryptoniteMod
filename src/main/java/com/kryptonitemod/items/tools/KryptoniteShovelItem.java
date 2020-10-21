@@ -2,9 +2,10 @@ package com.kryptonitemod.items.tools;
 
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.util.KryptoniteItemTier;
+import com.kryptonitemod.util.helpers.IKryptoniteChargeable;
 import net.minecraft.item.ShovelItem;
 
-public class KryptoniteShovelItem extends ShovelItem {
+public class KryptoniteShovelItem extends ShovelItem implements IKryptoniteChargeable {
     public static final String NAME = "kryptonite_shovel_item";
 
     public KryptoniteShovelItem() {

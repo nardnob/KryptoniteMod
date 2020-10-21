@@ -2,9 +2,10 @@ package com.kryptonitemod.items.tools;
 
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.util.KryptoniteItemTier;
+import com.kryptonitemod.util.helpers.IKryptoniteChargeable;
 import net.minecraft.item.PickaxeItem;
 
-public class KryptonitePickaxeItem extends PickaxeItem {
+public class KryptonitePickaxeItem extends PickaxeItem implements IKryptoniteChargeable {
     public static final String NAME = "kryptonite_pickaxe_item";
 
     public KryptonitePickaxeItem() {
