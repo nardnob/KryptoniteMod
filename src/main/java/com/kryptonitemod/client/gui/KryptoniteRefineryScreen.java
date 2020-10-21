@@ -3,6 +3,7 @@ package com.kryptonitemod.client.gui;
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.container.KryptoniteRefineryContainer;
 import com.kryptonitemod.tileentities.KryptoniteRefineryTileEntity;
+import com.kryptonitemod.util.helpers.KrypRectangle;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -11,8 +12,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.awt.*;
+
 public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefineryContainer> {
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(KryptoniteMod.MOD_ID, "textures/gui/container/kryptonite_refinery.png");
+    private static final KrypRectangle PROGRESS_RECTANGLE_BACKGROUND = new KrypRectangle(73, 27, 30, 26);
+    private static final KrypRectangle PROGRESS_RECTANGLE_FOREGROUND = new KrypRectangle(176, 0, 30, 26);
 
     public KryptoniteRefineryScreen(final KryptoniteRefineryContainer container, final PlayerInventory inventory, final ITextComponent title) {
         super(container, inventory, title);
@@ -69,18 +74,22 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
 
         this.blit(matrixStack, startX, startY, 0, 0, this.xSize, this.ySize);
 
-        /*
         final KryptoniteRefineryTileEntity tileEntity = container.tileEntity;
         if (tileEntity.smeltTimeLeft > 0) {
             // Draw progress arrow
-            int arrowWidth = getSmeltTimeScaled();
+            int progressHeight = getSmeltTimeScaled();
             this.blit(
                     matrixStack,
-                    startX + 79, startY + 34,
-                    176, 14,
-                    arrowWidth, 17
+                    startX + PROGRESS_RECTANGLE_BACKGROUND.x,
+                    startY + PROGRESS_RECTANGLE_BACKGROUND.y,
+                    PROGRESS_RECTANGLE_FOREGROUND.x,
+                    PROGRESS_RECTANGLE_FOREGROUND.y,
+                    PROGRESS_RECTANGLE_FOREGROUND.width,
+                    progressHeight
             );
         }
+
+        /*
         if (tileEntity.isBurning()) {
             // Draw flames
             int flameHeight = getFuelBurnTimeScaled();
@@ -100,7 +109,7 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
         final short maxSmeltTime = tileEntity.maxSmeltTime;
         if (smeltTimeLeft <= 0 || maxSmeltTime <= 0)
             return 0;
-        return (maxSmeltTime - smeltTimeLeft) * 24 / maxSmeltTime; // 24 is the width of the arrow
+        return (maxSmeltTime - smeltTimeLeft) * PROGRESS_RECTANGLE_FOREGROUND.height / maxSmeltTime;
     }
 
     private int getFuelBurnTimeScaled() {
