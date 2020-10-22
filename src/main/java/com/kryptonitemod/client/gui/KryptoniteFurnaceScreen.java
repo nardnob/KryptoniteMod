@@ -38,7 +38,7 @@ public class KryptoniteFurnaceScreen extends ContainerScreen<KryptoniteFurnaceCo
         boolean fireHovered = relMouseX > 56 && relMouseX < 70 && relMouseY > 36 && relMouseY < 50;
         if (fireHovered && tileEntity.maxFuelBurnTime > 0) {
             TranslationTextComponent tooltip = new TranslationTextComponent(
-                    "gui." + KryptoniteMod.MOD_ID + ".fuelBurnTimeProgress",
+                    "gui." + KryptoniteMod.MOD_ID + ".burnTimeProgress",
                     tileEntity.fuelBurnTimeLeft, tileEntity.maxFuelBurnTime
             );
             this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);

@@ -158,11 +158,11 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
         }
     }
 
-    private boolean isBurning() {
+    public boolean isBurning() {
         return this.fuelBurnTimeLeft > 0;
     }
 
-    private boolean isCharging() {
+    public boolean isCharging() {
         return this.inputChargeTimeLeft > 0;
     }
 

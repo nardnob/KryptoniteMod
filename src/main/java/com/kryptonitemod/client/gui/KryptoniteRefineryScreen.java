@@ -13,8 +13,10 @@ import net.minecraft.util.text.ITextComponent;
 
 public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefineryContainer> {
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(KryptoniteMod.MOD_ID, "textures/gui/container/kryptonite_refinery.png");
-    private static final KrypRectangle PROGRESS_RECTANGLE_BACKGROUND = new KrypRectangle(73, 27, 30, 26);
-    private static final KrypRectangle PROGRESS_RECTANGLE_FOREGROUND = new KrypRectangle(176, 0, 30, 26);
+    private static final KrypRectangle CHARGE_PROGRESS_RECTANGLE_BACKGROUND = new KrypRectangle(73, 27, 30, 26);
+    private static final KrypRectangle CHARGE_PROGRESS_RECTANGLE_FOREGROUND = new KrypRectangle(176, 0, 30, 26);
+    private static final KrypRectangle BURN_PROGRESS_RECTANGLE_BACKGROUND = new KrypRectangle(29, 36, 19, 34);
+    private static final KrypRectangle BURN_PROGRESS_RECTANGLE_FOREGROUND = new KrypRectangle(176, 26, 19, 34);
 
     public KryptoniteRefineryScreen(final KryptoniteRefineryContainer container, final PlayerInventory inventory, final ITextComponent title) {
         super(container, inventory, title);
@@ -51,45 +53,52 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
         final KryptoniteRefineryTileEntity tileEntity = container.tileEntity;
         if (tileEntity.inputChargeTimeLeft > 0) {
             // Draw progress arrow
-            int progressHeight = getChargeTimeScaled();
+            int progressHeight = getChargeTimeProgressHeight();
             this.blit(
                     matrixStack,
-                    startX + PROGRESS_RECTANGLE_BACKGROUND.x,
-                    startY + PROGRESS_RECTANGLE_BACKGROUND.y,
-                    PROGRESS_RECTANGLE_FOREGROUND.x,
-                    PROGRESS_RECTANGLE_FOREGROUND.y,
-                    PROGRESS_RECTANGLE_FOREGROUND.width,
+                    startX + CHARGE_PROGRESS_RECTANGLE_BACKGROUND.x,
+                    startY + CHARGE_PROGRESS_RECTANGLE_BACKGROUND.y,
+                    CHARGE_PROGRESS_RECTANGLE_FOREGROUND.x,
+                    CHARGE_PROGRESS_RECTANGLE_FOREGROUND.y,
+                    CHARGE_PROGRESS_RECTANGLE_FOREGROUND.width,
                     progressHeight
             );
         }
 
-        /*
         if (tileEntity.isBurning()) {
             // Draw flames
-            int flameHeight = getFuelBurnTimeScaled();
+            int flameHeight = getBurnTimeProgressHeight();
             this.blit(
                     matrixStack,
-                    startX + 56, startY + 50 - flameHeight,
-                    176, 14 - flameHeight,
-                    14, flameHeight
+                    startX + BURN_PROGRESS_RECTANGLE_BACKGROUND.x,
+                    startY + BURN_PROGRESS_RECTANGLE_BACKGROUND.y + (BURN_PROGRESS_RECTANGLE_FOREGROUND.height - flameHeight),
+                    BURN_PROGRESS_RECTANGLE_FOREGROUND.x,
+                    BURN_PROGRESS_RECTANGLE_FOREGROUND.y + (BURN_PROGRESS_RECTANGLE_FOREGROUND.height - flameHeight),
+                    BURN_PROGRESS_RECTANGLE_FOREGROUND.width,
+                    flameHeight
             );
         }
-        */
     }
 
-    private int getChargeTimeScaled() {
+    private int getChargeTimeProgressHeight() {
         final KryptoniteRefineryTileEntity tileEntity = this.container.tileEntity;
         final short chargeTimeLeft = tileEntity.inputChargeTimeLeft;
         final short maxChargeTime = tileEntity.maxInputChargeTime;
+
         if (chargeTimeLeft <= 0 || maxChargeTime <= 0)
             return 0;
-        return (maxChargeTime - chargeTimeLeft) * PROGRESS_RECTANGLE_FOREGROUND.height / maxChargeTime;
+
+        return (maxChargeTime - chargeTimeLeft) * CHARGE_PROGRESS_RECTANGLE_FOREGROUND.height / maxChargeTime;
     }
 
-    private int getFuelBurnTimeScaled() {
+    private int getBurnTimeProgressHeight() {
         final KryptoniteRefineryTileEntity tileEntity = this.container.tileEntity;
-        if (tileEntity.maxFuelBurnTime <= 0)
+        final short fuelBurnTimeLeft = tileEntity.fuelBurnTimeLeft;
+        final short maxFuelBurnTime = tileEntity.maxFuelBurnTime;
+
+        if (fuelBurnTimeLeft <= 0 || maxFuelBurnTime <= 0)
             return 0;
-        return tileEntity.fuelBurnTimeLeft * 16 / tileEntity.maxFuelBurnTime; // 14 is the height of the flames
+
+        return fuelBurnTimeLeft * BURN_PROGRESS_RECTANGLE_FOREGROUND.height / maxFuelBurnTime;
     }
 }
