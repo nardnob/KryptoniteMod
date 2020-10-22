@@ -194,27 +194,27 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
 
         if (!isCharging()) {
             inputChargeTimeLeft = maxInputChargeTime = getChargeTime(input);
-        } else {
-            inputChargeTimeLeft--;
-
-            double chargePercentage = (double)inputChargeTimeLeft / maxInputChargeTime;
-            if (chargePercentage % 0.25 == 0) {
-                KrypLogger.debugProperty("chargePercentage", chargePercentage);
-                KrypLogger.debugProperty("inputChargeTimeLeft", inputChargeTimeLeft);
-                KrypLogger.debugProperty("maxInputChargeTime", maxInputChargeTime);
-
-                this.world.playSound(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), SoundEvents.BLOCK_NOTE_BLOCK_HARP, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            }
-
-            if (inputChargeTimeLeft == 0) {
-                //set attributes on input item as a result
-
-                KrypLogger.info("Item charge event");
-                this.world.playSound(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), SoundEvents.ENTITY_CAT_HISS, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-                inputChargeTimeLeft = maxInputChargeTime = -1;
-            }
         }
+
+        double chargePercentage = (double)inputChargeTimeLeft / maxInputChargeTime;
+        if (chargePercentage % 0.25 == 0) {
+            //this.world.playSound(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), SoundEvents.BLOCK_BEEHIVE_DROP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        }
+
+        if (inputChargeTimeLeft == maxInputChargeTime) {
+            this.world.playSound(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), SoundEvents.BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT, SoundCategory.BLOCKS, 0.5F, 1.0F);
+        }
+
+        if (inputChargeTimeLeft == 1) { //final tick of charge
+            //set attributes on input item as a result
+
+            KrypLogger.info("Item charge event");
+            this.world.playSound(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), SoundEvents.ITEM_BUCKET_EMPTY_LAVA, SoundCategory.BLOCKS, 0.25F, 1.0F);
+
+            inputChargeTimeLeft = maxInputChargeTime = -1;
+        }
+
+        inputChargeTimeLeft--;
     }
 
     private FuelStack getFirstNonEmptyFuelStack() {
