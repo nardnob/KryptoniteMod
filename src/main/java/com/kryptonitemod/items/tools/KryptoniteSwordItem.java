@@ -17,4 +17,9 @@ public class KryptoniteSwordItem extends SwordItem implements IKryptoniteChargea
             new Item.Properties().group(KryptoniteMod.CREATIVE_TAB)
         );
     }
+
+    @Override
+    public short getChargeTime() {
+        return this.DEFAULT_CHARGE_TIME;
+    }
 }

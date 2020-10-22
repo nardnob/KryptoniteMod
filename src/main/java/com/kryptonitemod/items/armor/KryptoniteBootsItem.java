@@ -12,4 +12,9 @@ public class KryptoniteBootsItem extends ArmorItem implements IKryptoniteChargea
     public KryptoniteBootsItem() {
         super(KryptoniteArmorMaterial.KRYPTONITE, EquipmentSlotType.FEET, new Properties().group(KryptoniteMod.CREATIVE_TAB));
     }
+
+    @Override
+    public short getChargeTime() {
+        return this.DEFAULT_CHARGE_TIME;
+    }
 }

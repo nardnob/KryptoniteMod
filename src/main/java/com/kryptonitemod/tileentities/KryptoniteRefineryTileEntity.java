@@ -5,22 +5,21 @@ import com.kryptonitemod.container.KryptoniteRefineryContainer;
 import com.kryptonitemod.init.KryptoniteBlocks;
 import com.kryptonitemod.init.KryptoniteItems;
 import com.kryptonitemod.init.KryptoniteTileEntityTypes;
-import com.kryptonitemod.items.blocks.KryptoniteRefineryItem;
+import com.kryptonitemod.util.KrypLogger;
 import com.kryptonitemod.util.helpers.IKryptoniteChargeable;
+import com.kryptonitemod.util.helpers.IKryptoniteRefineryFuel;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -33,7 +32,6 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 public class KryptoniteRefineryTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
     public static final String NAME = "kryptonite_refinery_tile_entity";
@@ -50,8 +48,8 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
     public static final int FUEL_SLOT_9 = 9;
 
     private static final String INVENTORY_TAG = "inventory";
-    private static final String SMELT_TIME_LEFT_TAG = "smeltTimeLeft";
-    private static final String MAX_SMELT_TIME_TAG = "maxSmeltTime";
+    private static final String INPUT_CHARGE_TIME_LEFT_TAG = "inputChargeTimeLeft";
+    private static final String MAX_INPUT_CHARGE_TIME_TAG = "maxInputChargeTime";
     private static final String FUEL_BURN_TIME_LEFT_TAG = "fuelBurnTimeLeft";
     private static final String MAX_FUEL_BURN_TIME_TAG = "maxFuelBurnTime";
 
@@ -64,11 +62,10 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
     // Machines (hoppers, pipes) connected to this furnace's side can only insert/extract items from the fuel and input slots
     private final LazyOptional<IItemHandlerModifiable> _inventoryCapabilityExternalSides = LazyOptional.of(() -> new RangedWrapper(this.inventory, FUEL_SLOT_1, FUEL_SLOT_1 + 1));
 
-    public short smeltTimeLeft = -1;
-    public short maxSmeltTime = -1;
+    public short inputChargeTimeLeft = -1;
+    public short maxInputChargeTime = -1;
     public short fuelBurnTimeLeft = -1;
     public short maxFuelBurnTime = -1;
-    private boolean hadFuelLastTick = false;
 
     public final ItemStackHandler inventory = new ItemStackHandler(10) {
         @Override
@@ -119,124 +116,138 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
         return stack.getItem() instanceof IKryptoniteChargeable;
     }
 
-    /**
-     * @return The smelting recipe for the input stack
-     */
-    private Optional<FurnaceRecipe> getRecipe(final ItemStack input) {
-        // Due to vanilla's code we need to pass an IInventory into RecipeManager#getRecipe so we make one here.
-        return getRecipe(new Inventory(input));
-    }
-
-    /**
-     * @return The smelting recipe for the inventory
-     */
-    private Optional<FurnaceRecipe> getRecipe(final IInventory inventory) {
-        return world.getRecipeManager().getRecipe(IRecipeType.SMELTING, inventory, world);
-    }
-
-    /**
-     * Called every tick to update our tile entity
-     */
     @Override
     public void tick() {
         if (world == null || world.isRemote)
             return;
 
-        boolean hasFuel = false;
-        if (isBurning()) {
-            hasFuel = true;
-            --fuelBurnTimeLeft;
-        }
+        boolean wasBurningLastTick = isBurning();
+        decrementFuelBurnTimeLeft();
 
         final ItemStack input = inventory.getStackInSlot(INPUT_SLOT).copy();
 
         if (isValidInput(input)) {
-            if (!hasFuel && burnFuel()) {
-                hasFuel = true;
+            if (!isBurning()) {
+                tryBurningFuel();
             }
 
-            smeltTick(hasFuel, input);
+            tryChargingInput(input);
         } else {
             // We have an invalid input stack (somehow)
-            smeltTimeLeft = maxSmeltTime = -1;
+            inputChargeTimeLeft = maxInputChargeTime = -1;
         }
 
-        if (hadFuelLastTick != hasFuel) {
-            updateBlockStateWithBurning(hasFuel);
+        if (wasBurningLastTick != isBurning()) {
+            updateBlockStateWithBurning(isBurning());
         }
-
-        hadFuelLastTick = hasFuel;
     }
 
-    private boolean burnFuel() {
-        final ItemStack fuelStack = inventory.getStackInSlot(FUEL_SLOT_1).copy();
+    private class FuelStack {
+        ItemStack stack;
+        int slot;
 
-        if (!fuelStack.isEmpty()) {
-            final int burnTime = getSmeltTime(fuelStack);
+        private FuelStack(ItemStack stack, int slot) { this.stack = stack; this.slot = slot;}
+    }
 
-            if (burnTime > 0) {
-                fuelBurnTimeLeft = maxFuelBurnTime = ((short) burnTime);
+    private void decrementFuelBurnTimeLeft() {
+        if (this.fuelBurnTimeLeft > 0) {
+            this.fuelBurnTimeLeft--;
+        }
+        if (this.fuelBurnTimeLeft == 0) {
+            this.fuelBurnTimeLeft = this.maxFuelBurnTime = -1;
+        }
+    }
 
-                fuelStack.shrink(1);
-                inventory.setStackInSlot(FUEL_SLOT_1, fuelStack); // Update the data
+    private boolean isBurning() {
+        return this.fuelBurnTimeLeft > 0;
+    }
 
-                return true;
+    private boolean isCharging() {
+        return this.inputChargeTimeLeft > 0;
+    }
+
+    private void tryBurningFuel() {
+        FuelStack fuelStack = getFirstNonEmptyFuelStack();
+
+        if (fuelStack != null) {
+            final int stackBurnTime = getBurnTime(fuelStack.stack);
+
+            if (stackBurnTime > 0) {
+                fuelStack.stack.shrink(1);
+                inventory.setStackInSlot(fuelStack.slot, fuelStack.stack);
+                fuelBurnTimeLeft = maxFuelBurnTime = (short) stackBurnTime;
+                return;
             }
         }
 
         fuelBurnTimeLeft = maxFuelBurnTime = -1;
-        return false;
     }
 
-    private void smeltTick(boolean hasFuel, ItemStack input) {
-        if (!hasFuel) {
-            // No fuel -> add to smelt time left to simulate cooling
-            if (smeltTimeLeft < maxSmeltTime) {
-                smeltTimeLeft++;
+    private void tryChargingInput(ItemStack input) {
+        if (!isBurning()) {
+            // No fuel -> add to charge time left to simulate cooling
+            if (inputChargeTimeLeft < maxInputChargeTime) {
+                inputChargeTimeLeft++;
             }
             return;
         }
 
-        boolean notCurrentlySmelting = smeltTimeLeft == -1;
-        if (notCurrentlySmelting) {
-            smeltTimeLeft = maxSmeltTime = getSmeltTime(input);
+        if (!isCharging()) {
+            inputChargeTimeLeft = maxInputChargeTime = getChargeTime(input);
         } else {
-            smeltTimeLeft--;
+            inputChargeTimeLeft--;
 
-            if (smeltTimeLeft == 0) {
+            double chargePercentage = (double)inputChargeTimeLeft / maxInputChargeTime;
+            if (chargePercentage % 0.25 == 0) {
+                KrypLogger.debugProperty("chargePercentage", chargePercentage);
+                KrypLogger.debugProperty("inputChargeTimeLeft", inputChargeTimeLeft);
+                KrypLogger.debugProperty("maxInputChargeTime", maxInputChargeTime);
+
+                this.world.playSound(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), SoundEvents.BLOCK_NOTE_BLOCK_HARP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            }
+
+            if (inputChargeTimeLeft == 0) {
                 //set attributes on input item as a result
 
-                //input.shrink(1);
-                //inventory.setStackInSlot(INPUT_SLOT, input); // Update the data
+                KrypLogger.info("Item charge event");
+                this.world.playSound(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), SoundEvents.ENTITY_CAT_HISS, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
-                smeltTimeLeft = -1; // Set to -1 so we smelt the next stack on the next tick
+                inputChargeTimeLeft = maxInputChargeTime = -1;
             }
         }
     }
 
-    private void updateBlockStateWithBurning(boolean hasFuel) {
+    private FuelStack getFirstNonEmptyFuelStack() {
+        //Find the first non-empty fuel slot (right-to-left)
+        for (int fuelSlot = FUEL_SLOT_9; fuelSlot >= FUEL_SLOT_1; fuelSlot--) {
+            ItemStack fuelStack = inventory.getStackInSlot(fuelSlot).copy();
+
+            if (!fuelStack.isEmpty()) {
+                return new FuelStack(fuelStack, fuelSlot);
+            }
+        }
+
+        return null;
+    }
+
+    private void updateBlockStateWithBurning(boolean burning) {
         // "markDirty" tells vanilla that the chunk containing the tile entity has
         // changed and means the game will save the chunk to disk later.
         this.markDirty();
 
         final BlockState newState = this.getBlockState()
-                .with(KryptoniteRefineryBlock.BURNING, hasFuel);
+                .with(KryptoniteRefineryBlock.BURNING, burning);
 
         // Flag 2: Send the change to clients
         world.setBlockState(pos, newState, 2);
     }
 
-    /**
-     * Mimics the code in AbstractFurnaceTileEntity#func_214005_h
-     *
-     * @return The custom smelt time or 200 if there is no recipe for the input
-     */
-    private short getSmeltTime(final ItemStack input) {
-        return KryptoniteRefineryItem.REFINERY_CHARGE_TIME;
+    private short getBurnTime(final ItemStack input) {
+        return input.getItem() instanceof IKryptoniteRefineryFuel ? ((IKryptoniteRefineryFuel)input.getItem()).getBurnTime() : -1;
     }
 
-    public boolean isBurning() {
-        return this.fuelBurnTimeLeft > 0;
+    private short getChargeTime(final ItemStack input) {
+        return input.getItem() instanceof IKryptoniteChargeable ? ((IKryptoniteChargeable)input.getItem()).getChargeTime() : -1;
     }
 
     /**
@@ -270,10 +281,8 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
     @Override
     public void onLoad() {
         super.onLoad();
-        // We set this in onLoad instead of the constructor so that TileEntities
-        // constructed from NBT (saved tile entities) have this set to the proper value
-        if (world != null && !world.isRemote)
-            hadFuelLastTick = isBurning();
+        if (world != null && !world.isRemote) {
+        }
     }
 
     /**
@@ -283,8 +292,8 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
     public void read(BlockState state, final CompoundNBT compound) {
         super.read(state, compound);
         this.inventory.deserializeNBT(compound.getCompound(INVENTORY_TAG));
-        this.smeltTimeLeft = compound.getShort(SMELT_TIME_LEFT_TAG);
-        this.maxSmeltTime = compound.getShort(MAX_SMELT_TIME_TAG);
+        this.inputChargeTimeLeft = compound.getShort(INPUT_CHARGE_TIME_LEFT_TAG);
+        this.maxInputChargeTime = compound.getShort(MAX_INPUT_CHARGE_TIME_TAG);
         this.fuelBurnTimeLeft = compound.getShort(FUEL_BURN_TIME_LEFT_TAG);
         this.maxFuelBurnTime = compound.getShort(MAX_FUEL_BURN_TIME_TAG);
     }
@@ -297,8 +306,8 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
     public CompoundNBT write(final CompoundNBT compound) {
         super.write(compound);
         compound.put(INVENTORY_TAG, this.inventory.serializeNBT());
-        compound.putShort(SMELT_TIME_LEFT_TAG, this.smeltTimeLeft);
-        compound.putShort(MAX_SMELT_TIME_TAG, this.maxSmeltTime);
+        compound.putShort(INPUT_CHARGE_TIME_LEFT_TAG, this.inputChargeTimeLeft);
+        compound.putShort(MAX_INPUT_CHARGE_TIME_TAG, this.maxInputChargeTime);
         compound.putShort(FUEL_BURN_TIME_LEFT_TAG, this.fuelBurnTimeLeft);
         compound.putShort(MAX_FUEL_BURN_TIME_TAG, this.maxFuelBurnTime);
         return compound;

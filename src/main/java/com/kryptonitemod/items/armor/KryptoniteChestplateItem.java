@@ -12,4 +12,9 @@ public class KryptoniteChestplateItem extends ArmorItem implements IKryptoniteCh
     public KryptoniteChestplateItem() {
         super(KryptoniteArmorMaterial.KRYPTONITE, EquipmentSlotType.CHEST, new Properties().group(KryptoniteMod.CREATIVE_TAB));
     }
+
+    @Override
+    public short getChargeTime() {
+        return this.DEFAULT_CHARGE_TIME;
+    }
 }

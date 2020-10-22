@@ -13,4 +13,9 @@ public class KryptoniteHelmetItem extends ArmorItem implements IKryptoniteCharge
     public KryptoniteHelmetItem() {
         super(KryptoniteArmorMaterial.KRYPTONITE, EquipmentSlotType.HEAD, new Item.Properties().group(KryptoniteMod.CREATIVE_TAB));
     }
+
+    @Override
+    public short getChargeTime() {
+        return this.DEFAULT_CHARGE_TIME;
+    }
 }

@@ -16,4 +16,9 @@ public class KryptoniteHoeItem extends HoeItem implements IKryptoniteChargeable 
             new Properties().group(KryptoniteMod.CREATIVE_TAB)
         );
     }
+
+    @Override
+    public short getChargeTime() {
+        return this.DEFAULT_CHARGE_TIME;
+    }
 }

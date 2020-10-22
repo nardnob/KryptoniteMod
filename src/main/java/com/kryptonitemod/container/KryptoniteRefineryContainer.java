@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import java.util.Objects;
 
 /**
- * Smelt time is synced with
+ * Charge time is synced with
  * Server: Each tick {@link #detectAndSendChanges()} is called ({@link ServerPlayerEntity#tick()})
  * Server: The (tracked) value of the tile's energy is updated ({@link #updateProgressBar(int, int)})
  * Server: If the value is different from the value last sent to the client ({@link IntReferenceHolder#isDirty()}),
@@ -52,8 +52,8 @@ public class KryptoniteRefineryContainer extends Container {
         this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
 
         // Add tracking for data (Syncs to client/updates value when it changes)
-        this.trackInt(new FunctionalIntReferenceHolder(() -> tileEntity.smeltTimeLeft, v -> tileEntity.smeltTimeLeft = (short) v));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> tileEntity.maxSmeltTime, v -> tileEntity.maxSmeltTime = (short) v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> tileEntity.inputChargeTimeLeft, v -> tileEntity.inputChargeTimeLeft = (short) v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> tileEntity.maxInputChargeTime, v -> tileEntity.maxInputChargeTime = (short) v));
         this.trackInt(new FunctionalIntReferenceHolder(() -> tileEntity.fuelBurnTimeLeft, v -> tileEntity.fuelBurnTimeLeft = (short) v));
         this.trackInt(new FunctionalIntReferenceHolder(() -> tileEntity.maxFuelBurnTime, v -> tileEntity.maxFuelBurnTime = (short) v));
 

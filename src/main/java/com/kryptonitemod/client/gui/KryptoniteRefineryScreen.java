@@ -10,9 +10,6 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.awt.*;
 
 public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefineryContainer> {
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(KryptoniteMod.MOD_ID, "textures/gui/container/kryptonite_refinery.png");
@@ -28,38 +25,15 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
-
-        /*
-        int relMouseX = mouseX - this.guiLeft;
-        int relMouseY = mouseY - this.guiTop;
-        final KryptoniteRefineryTileEntity tileEntity = this.container.tileEntity;
-        boolean arrowHovered = relMouseX > 79 && relMouseX < 104 && relMouseY > 34 && relMouseY < 50;
-        if (arrowHovered && tileEntity.maxSmeltTime > 0) {
-            TranslationTextComponent tooltip = new TranslationTextComponent(
-                    "gui." + KryptoniteMod.MOD_ID + ".smeltTimeProgress",
-                    tileEntity.smeltTimeLeft, tileEntity.maxSmeltTime
-            );
-            this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
-        }
-        boolean fireHovered = relMouseX > 56 && relMouseX < 70 && relMouseY > 36 && relMouseY < 50;
-        if (fireHovered && tileEntity.maxFuelBurnTime > 0) {
-            TranslationTextComponent tooltip = new TranslationTextComponent(
-                    "gui." + KryptoniteMod.MOD_ID + ".fuelBurnTimeProgress",
-                    tileEntity.fuelBurnTimeLeft, tileEntity.maxFuelBurnTime
-            );
-            this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
-        }
-        */
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, final int mouseX, final int mouseY) {
-        //super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
+        //super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY); //This would render the titles of the container and the player inventory
 
         final KryptoniteRefineryTileEntity tileEntity = this.container.tileEntity;
-        if (tileEntity.smeltTimeLeft > 0)
-            this.font.drawString(matrixStack, tileEntity.smeltTimeLeft + " / " + tileEntity.maxSmeltTime, 8.0F, this.ySize, 0xFFFFFF);
-        this.font.drawString(matrixStack, tileEntity.fuelBurnTimeLeft + " / " + tileEntity.maxFuelBurnTime, 8.0F, this.ySize + 14, 0xFFFFFF);
+        this.font.drawString(matrixStack, "Charge Time: " + tileEntity.inputChargeTimeLeft + " / " + tileEntity.maxInputChargeTime, 8.0F, this.ySize, 0xFFFFFF);
+        this.font.drawString(matrixStack, "Burn Time:   " + tileEntity.fuelBurnTimeLeft + " / " + tileEntity.maxFuelBurnTime, 8.0F, this.ySize + 14, 0xFFFFFF);
     }
 
     @Override
@@ -75,9 +49,9 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
         this.blit(matrixStack, startX, startY, 0, 0, this.xSize, this.ySize);
 
         final KryptoniteRefineryTileEntity tileEntity = container.tileEntity;
-        if (tileEntity.smeltTimeLeft > 0) {
+        if (tileEntity.inputChargeTimeLeft > 0) {
             // Draw progress arrow
-            int progressHeight = getSmeltTimeScaled();
+            int progressHeight = getChargeTimeScaled();
             this.blit(
                     matrixStack,
                     startX + PROGRESS_RECTANGLE_BACKGROUND.x,
@@ -103,13 +77,13 @@ public class KryptoniteRefineryScreen extends ContainerScreen<KryptoniteRefinery
         */
     }
 
-    private int getSmeltTimeScaled() {
+    private int getChargeTimeScaled() {
         final KryptoniteRefineryTileEntity tileEntity = this.container.tileEntity;
-        final short smeltTimeLeft = tileEntity.smeltTimeLeft;
-        final short maxSmeltTime = tileEntity.maxSmeltTime;
-        if (smeltTimeLeft <= 0 || maxSmeltTime <= 0)
+        final short chargeTimeLeft = tileEntity.inputChargeTimeLeft;
+        final short maxChargeTime = tileEntity.maxInputChargeTime;
+        if (chargeTimeLeft <= 0 || maxChargeTime <= 0)
             return 0;
-        return (maxSmeltTime - smeltTimeLeft) * PROGRESS_RECTANGLE_FOREGROUND.height / maxSmeltTime;
+        return (maxChargeTime - chargeTimeLeft) * PROGRESS_RECTANGLE_FOREGROUND.height / maxChargeTime;
     }
 
     private int getFuelBurnTimeScaled() {
