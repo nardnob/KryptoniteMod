@@ -32,6 +32,7 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class KryptoniteRefineryTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
     public static final String NAME = "kryptonite_refinery_tile_entity";
@@ -46,6 +47,9 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
     public static final int FUEL_SLOT_7 = 7;
     public static final int FUEL_SLOT_8 = 8;
     public static final int FUEL_SLOT_9 = 9;
+
+    private static final long seed = System.currentTimeMillis();
+    private static final Random rand = new Random(seed);
 
     private static final String INVENTORY_TAG = "inventory";
     private static final String INPUT_CHARGE_TIME_LEFT_TAG = "inputChargeTimeLeft";
@@ -109,11 +113,12 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
         return stack.getItem() == KryptoniteItems.KRYPTONITE.get();
     }
 
-    private boolean isValidInput(final ItemStack stack) {
-        if (stack.isEmpty())
+    private boolean isValidInput(final ItemStack input) {
+        if (input.isEmpty()) {
             return false;
+        }
 
-        return stack.getItem() instanceof IKryptoniteChargeable;
+        return input.getItem() instanceof IKryptoniteChargeable;
     }
 
     @Override
@@ -187,10 +192,14 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
         if (!isBurning()) {
             // No fuel -> add to charge time left to simulate cooling
             if (inputChargeTimeLeft < maxInputChargeTime) {
-                inputChargeTimeLeft++;
+                if (this.rand.nextDouble() < 0.1) {
+                    inputChargeTimeLeft++;
+                }
             }
             return;
         }
+
+        inputChargeTimeLeft--;
 
         if (!isCharging()) {
             inputChargeTimeLeft = maxInputChargeTime = getChargeTime(input);
@@ -205,16 +214,18 @@ public class KryptoniteRefineryTileEntity extends TileEntity implements ITickabl
             this.world.playSound(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), SoundEvents.BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT, SoundCategory.BLOCKS, 0.5F, 1.0F);
         }
 
-        if (inputChargeTimeLeft == 1) { //final tick of charge
+        if (inputChargeTimeLeft == 0) { //final tick of charge
             //set attributes on input item as a result
 
-            KrypLogger.info("Item charge event");
+            chargeInput(input);
             this.world.playSound(null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), SoundEvents.ITEM_BUCKET_EMPTY_LAVA, SoundCategory.BLOCKS, 0.25F, 1.0F);
 
             inputChargeTimeLeft = maxInputChargeTime = -1;
+            return;
         }
+    }
 
-        inputChargeTimeLeft--;
+    private void chargeInput(ItemStack input) {
     }
 
     private FuelStack getFirstNonEmptyFuelStack() {
