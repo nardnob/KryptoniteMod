@@ -1,6 +1,6 @@
 package com.kryptonitemod.client.model;
 
-import com.kryptonitemod.entities.GorillaEntity;
+import com.kryptonitemod.entities.passive.GorillaEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.EntityModel;

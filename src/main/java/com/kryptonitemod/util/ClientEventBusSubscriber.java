@@ -4,7 +4,8 @@ import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.client.gui.KryptoniteRefineryScreen;
 import com.kryptonitemod.client.gui.KryptoniteFurnaceScreen;
 import com.kryptonitemod.client.render.GorillaEntityRenderer;
-import com.kryptonitemod.entities.GorillaEntity;
+import com.kryptonitemod.client.render.KryptoniteBulletEntityRenderer;
+import com.kryptonitemod.entities.passive.GorillaEntity;
 import com.kryptonitemod.init.KryptoniteContainerTypes;
 import com.kryptonitemod.init.KryptoniteEntityTypes;
 import com.kryptonitemod.items.spawneggs.KryptoniteSpawnEggItem;
@@ -26,6 +27,7 @@ public class ClientEventBusSubscriber {
         KrypLogger.debug("Registered TileEntity Renderers");
 
         RenderingRegistry.registerEntityRenderingHandler(KryptoniteEntityTypes.GORILLA.get(), GorillaEntityRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(KryptoniteEntityTypes.KRYPTONITE_BULLET.get(), KryptoniteBulletEntityRenderer::new);
         KrypLogger.debug("Registered Entity Renderers");
 
         //TODO kryp - replace deprecated function after migration back to 1.16.3

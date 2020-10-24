@@ -2,7 +2,7 @@ package com.kryptonitemod.client.render;
 
 import com.kryptonitemod.KryptoniteMod;
 import com.kryptonitemod.client.model.GorillaEntityModel;
-import com.kryptonitemod.entities.GorillaEntity;
+import com.kryptonitemod.entities.passive.GorillaEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;

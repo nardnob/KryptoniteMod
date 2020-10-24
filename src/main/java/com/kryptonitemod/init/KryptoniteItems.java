@@ -9,6 +9,7 @@ import com.kryptonitemod.items.armor.KryptoniteChestplateItem;
 import com.kryptonitemod.items.armor.KryptoniteHelmetItem;
 import com.kryptonitemod.items.armor.KryptoniteLeggingsItem;
 import com.kryptonitemod.items.food.KryptoniteLoafItem;
+import com.kryptonitemod.items.projectiles.KryptoniteBulletItem;
 import com.kryptonitemod.items.spawneggs.GorillaSpawnEggItem;
 import com.kryptonitemod.items.tools.*;
 import com.kryptonitemod.items.blocks.KryptoniteRefineryItem;
@@ -23,6 +24,9 @@ public class KryptoniteItems {
 
     //Misc
     public static final RegistryObject<Item> KRYPTONITE = ITEMS.register(KryptoniteItem.NAME, KryptoniteItem::new);
+
+    //Projectiles
+    public static final RegistryObject<Item> KRYPTONITE_BULLET = ITEMS.register(KryptoniteBulletItem.NAME, KryptoniteBulletItem::new);
 
     //Spawn Eggs
     public static final RegistryObject<Item> GORILLA_SPAWN_EGG = ITEMS.register(GorillaSpawnEggItem.NAME, GorillaSpawnEggItem::new);

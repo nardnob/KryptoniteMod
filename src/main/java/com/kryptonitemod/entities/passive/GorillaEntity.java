@@ -1,5 +1,6 @@
-package com.kryptonitemod.entities;
+package com.kryptonitemod.entities.passive;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.kryptonitemod.init.KryptoniteEntityTypes;
@@ -14,11 +15,13 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class GorillaEntity extends AnimalEntity {
     public static final String NAME = "gorilla_entity";
@@ -84,5 +87,12 @@ public class GorillaEntity extends AnimalEntity {
         if (this.world.isRemote) {
         }
         super.livingTick();
+    }
+
+    //Not required for living entities
+    @Override
+    @Nonnull
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

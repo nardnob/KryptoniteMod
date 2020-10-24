@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kryptonitemod:items/kryptonite_bullet_item"
+  }
+}
